@@ -1,0 +1,158 @@
+:root {
+    /* FONT SIZE */
+    --text-sm: 1.4rem;
+    --text-base: 1.6rem;
+    --text-paragraph: 2rem;
+    --text-h5: 2.4rem;
+    --text-h4: 3.2rem;
+    --text-h3: 4rem;
+    --text-h2: 4.8rem;
+    --text-h1: 6.2rem;
+
+    /* FONT WEIGHTS */
+    --font-weight-normal: 400;
+    --font-weight-bold: 700;
+
+    /* LINE HEIGHT */
+    --line-height-tight: 1.2;
+    --line-height-normal: 1.5;
+
+    /* LETTER SPACING */
+    --letter-spacing-tight: -0.5px;
+
+    /* FONT FAMILY */
+    --font-family: "Google Sans", sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%; /* 10px */
+    font-family: var(--font-family);
+}
+
+body {
+    background-color: #191919;
+    color: rgb(232, 232, 232);
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    font-family: var(--font-family);
+    letter-spacing: var(--letter-spacing-tight);
+}
+
+h1 {
+    font-size: var(--text-h1);
+}
+h2 {
+    font-size: var(--text-h2);
+
+    margin: 2rem 0;
+}
+h3 {
+    font-size: var(--text-h3);
+}
+h4 {
+    font-size: var(--text-h4);
+}
+h5 {
+    font-size: var(--text-h5);
+}
+
+p, ul, label {
+    font-size: var(--text-base);
+}
+
+ul {
+    list-style: none;
+}
+
+#root {
+    max-width: 150rem;
+    margin: 0 auto;
+}
+
+/* NOTE FORM */
+.note-form {
+    width: 60rem;
+    margin: 0 auto;
+    padding: 1.5rem;
+    border: 1px solid rgb(165, 165, 165);
+    border-radius: 5px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;   
+}
+
+.note-form input {
+    font-size: var(--text-base);
+    width: 100%;
+    background-color: #191919;
+    color: rgb(232, 232, 232);
+    border: none;
+    padding: 0.5rem;
+    font-weight: 500;
+}
+
+.note-form input:focus {
+    outline: none;
+}
+
+.note-form button {
+    width: 10rem;
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+
+    color: rgb(232, 232, 232);
+    background-color: transparent;
+
+    border: 1px solid rgb(165, 165, 165);
+    border-radius: 5px;
+
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    background-color: rgb(232, 232, 232);
+    color: #191919;
+    border-color: rgb(232, 232, 232);
+}
+
+/* NOTE LIST */
+.note-list-container {
+    padding: 2rem;
+    column-count: auto;
+    column-width: 25rem;
+    column-gap: 1.5rem;
+}
+
+.note {
+    border: 1px solid rgb(165, 165, 165);
+    border-radius: 5px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    break-inside: avoid;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.note > .icons {
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+

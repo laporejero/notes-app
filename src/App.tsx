@@ -105,7 +105,7 @@ function App() {
 
   return (
     <>
-      <h1>Mini Notes App</h1>
+      <h2>Notes App</h2>
       <NoteForm newNote={newNote} setNewNote={setNewNote} noteTitle={noteTitle} setNoteTitle={setNoteTitle} addNote={addNote} />
       <NoteFilter filter={filter} setFilter={setFilter} />
       {content}

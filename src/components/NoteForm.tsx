@@ -10,7 +10,7 @@ type NoteFormProps = {
 
 function NoteForm({ newNote, setNewNote, noteTitle, setNoteTitle, addNote }: NoteFormProps): JSX.Element {
     return (
-        <form onSubmit={(e) => e.preventDefault()}>
+        <form className="note-form" onSubmit={(e) => e.preventDefault()}>
             <input 
                 type="text" 
                 placeholder="Title"
@@ -23,7 +23,7 @@ function NoteForm({ newNote, setNewNote, noteTitle, setNoteTitle, addNote }: Not
                 value={newNote}
                 onChange={(e) => setNewNote(e.target.value)}
             />
-            <button onClick={addNote}>Add</button>
+            <button onClick={addNote}>Add Note</button>
         </form>
     )
 }

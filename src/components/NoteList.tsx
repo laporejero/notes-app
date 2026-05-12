@@ -10,16 +10,18 @@ type NoteListProps = {
 
 function NoteList({ notes, deleteNote, toggleFavorites }: NoteListProps): JSX.Element {
     return (
-        <ul>
-            {notes.map(note => (
-                <NoteItem 
-                    key={note.id} 
-                    note={note} 
-                    toggleFavorites={toggleFavorites} 
-                    deleteNote={deleteNote} 
-                />
-            ))}
-        </ul>
+        <div className="note-list-container">
+            <ul>
+                {notes.map(note => (
+                    <NoteItem 
+                        key={note.id} 
+                        note={note} 
+                        toggleFavorites={toggleFavorites} 
+                        deleteNote={deleteNote} 
+                    />
+                ))}
+            </ul>
+        </div>
     )
 }
 
