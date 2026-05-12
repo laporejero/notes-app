@@ -1,7 +1,8 @@
-import { use, useActionState, useState } from "react"
+import { useEffect, useState } from "react"
 import type { Note, Filter } from "./types"
 import NoteList from "./components/NoteList"
 import NoteForm from "./components/NoteForm"
+import NoteFilter from "./components/NoteFilter"
 
 const listsOfNotes: Note[] = [
   {
@@ -37,10 +38,23 @@ const listsOfNotes: Note[] = [
 ]
 
 function App() {
-  const [notes, setNotes] = useState<Note[]>(listsOfNotes)
+  // states
+  const [notes, setNotes] = useState<Note[]>(() => {
+    try {
+      const saved = localStorage.getItem("notes")
+      return saved ? JSON.parse(saved) : listsOfNotes
+    } catch (error) {
+      console.error("Failed to parse notes:", error)
+      return listsOfNotes
+    }
+  })
   const [noteTitle, setNoteTitle] = useState<string>("")
   const [newNote, setNewNote] = useState<string>("")
   const [filter, setFilter] = useState<Filter>("All")
+
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes))
+  }, [notes])
 
   function addNote(): void {
     if (!noteTitle.trim() || !newNote.trim()) {
@@ -66,11 +80,35 @@ function App() {
     )
   }
 
+  function toggleFavorites(id: number): void {
+    setNotes(prevNotes =>
+      prevNotes.map(note => 
+        note.id === id ? { ...note, isFavorite: !note.isFavorite } : note
+      )
+    )
+  }
+
+  const filteredNotes = notes.filter(note => {
+    if (filter === "Favorites") return note.isFavorite
+    return true
+  })
+
+  let content
+
+  if (filteredNotes.length === 0) {
+    content = <p>No notes available.</p>
+  } else {
+    content = (
+      <NoteList notes={filteredNotes} toggleFavorites={toggleFavorites} deleteNote={deleteNote} />
+    )
+  }
+
   return (
     <>
       <h1>Mini Notes App</h1>
       <NoteForm newNote={newNote} setNewNote={setNewNote} noteTitle={noteTitle} setNoteTitle={setNoteTitle} addNote={addNote} />
-      <NoteList notes={notes} deleteNote={deleteNote} />
+      <NoteFilter filter={filter} setFilter={setFilter} />
+      {content}
     </>
   )
 }
