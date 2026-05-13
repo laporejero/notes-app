@@ -10,7 +10,7 @@ function NoteFilter({ filter, setFilter }: NoteFilterProps): JSX.Element {
     return (
         <form>
             <label>
-                Show notes:
+                <span>Show notes: </span>
                 <select 
                     value={filter} 
                     onChange={e => setFilter(e.target.value as Filter)}

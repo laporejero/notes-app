@@ -73,15 +73,39 @@ ul {
     list-style: none;
 }
 
-#root {
-    max-width: 150rem;
+main {
+    max-width: 180rem;
     margin: 0 auto;
+}
+
+/* NAVBAR */
+.navbar {
+    padding: 1rem 2rem;
+
+    display: flex;
+    align-items: center;
+    gap: 5rem;
+}
+
+.navbar input {
+    font-size: var(--text-base);
+    background-color: #191919;
+    width: 50rem;
+    color: rgb(232, 232, 232);
+    border: 1px solid rgb(165, 165, 165);
+    border-radius: 1rem;
+    padding: 1rem;
+    font-weight: 500;
+}
+
+hr {
+    color: rgb(165, 165, 165);
 }
 
 /* NOTE FORM */
 .note-form {
     width: 60rem;
-    margin: 0 auto;
+    margin: 2rem auto 0;
     padding: 1.5rem;
     border: 1px solid rgb(165, 165, 165);
     border-radius: 5px;
@@ -154,5 +178,9 @@ button:hover {
     display: flex;
     align-items: center;
     gap: 1rem;
+}
+
+.no-notes-message {
+    padding: 2rem;
 }
 

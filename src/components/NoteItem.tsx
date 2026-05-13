@@ -15,7 +15,19 @@ function NoteItem({ note, deleteNote, toggleFavorites }: NoteItemProps): JSX.Ele
 
     return (
         <li className="note">
-            <h5>{note.title}</h5>
+            <h5>
+                {note.title}
+                <IonIcon 
+                    icon={note.isFavorite ? star : starOutline}
+                    id={checkboxId}
+                    style={{
+                        marginLeft: "1rem",
+                        fontSize: "1.5rem",
+                        color: note.isFavorite ? "gold" : ""
+                    }}
+                    onClick={() => toggleFavorites(note.id)} 
+                />
+            </h5>
             <p>{note.note}</p>
             <div className="icons">
                 {/* <input 
@@ -24,14 +36,6 @@ function NoteItem({ note, deleteNote, toggleFavorites }: NoteItemProps): JSX.Ele
                     onChange={() => toggleFavorites(note.id)} 
                     checked={note.isFavorite} 
                 /> */}
-                <IonIcon 
-                    icon={note.isFavorite ? star : starOutline}
-                    id={checkboxId}
-                    style={{
-                        color: note.isFavorite ? "gold" : ""
-                    }}
-                    onClick={() => toggleFavorites(note.id)} 
-                />
                 <IonIcon 
                     icon={trashOutline}
                     style={{

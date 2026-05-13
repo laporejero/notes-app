@@ -1,56 +1,27 @@
 import { useEffect, useState } from "react"
 import type { Note, Filter } from "./types"
+import Navbar from "./components/Navbar"
 import NoteList from "./components/NoteList"
 import NoteForm from "./components/NoteForm"
 import NoteFilter from "./components/NoteFilter"
-
-const listsOfNotes: Note[] = [
-  {
-    "id": 1,
-    "title": "Project Setup",
-    "note": "Initialize the repository and configure the development environment.",
-    "isFavorite": true
-  },
-  {
-    "id": 2,
-    "title": "Database Design",
-    "note": "Create tables and relationships for user and task data.",
-    "isFavorite": false
-  },
-  {
-    "id": 3,
-    "title": "API Development",
-    "note": "Build REST endpoints for CRUD operations.",
-    "isFavorite": false
-  },
-  {
-    "id": 4,
-    "title": "Frontend Integration",
-    "note": "Connect the UI with backend services.",
-    "isFavorite": true
-  },
-  {
-    "id": 5,
-    "title": "Testing",
-    "note": "Write unit and integration tests for core features.",
-    "isFavorite": false
-  }
-]
 
 function App() {
   // states
   const [notes, setNotes] = useState<Note[]>(() => {
     try {
       const saved = localStorage.getItem("notes")
-      return saved ? JSON.parse(saved) : listsOfNotes
+      return saved ? JSON.parse(saved) : []
     } catch (error) {
       console.error("Failed to parse notes:", error)
-      return listsOfNotes
+      return []
     }
   })
   const [noteTitle, setNoteTitle] = useState<string>("")
   const [newNote, setNewNote] = useState<string>("")
   const [filter, setFilter] = useState<Filter>("All")
+  const [search, setSearch] = useState<string>("")
+
+  console.log(search)
 
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes))
@@ -89,14 +60,20 @@ function App() {
   }
 
   const filteredNotes = notes.filter(note => {
-    if (filter === "Favorites") return note.isFavorite
-    return true
+    const matchesFavorite =
+      filter === "Favorites" ? note.isFavorite : true
+
+    const matchesSearch =
+      note.title.toLowerCase().includes(search.toLowerCase()) ||
+      note.note.toLowerCase().includes(search.toLowerCase())
+
+    return matchesFavorite && matchesSearch
   })
 
   let content
 
   if (filteredNotes.length === 0) {
-    content = <p>No notes available.</p>
+    content = <p className="no-notes-message">No notes available.</p>
   } else {
     content = (
       <NoteList notes={filteredNotes} toggleFavorites={toggleFavorites} deleteNote={deleteNote} />
@@ -105,10 +82,12 @@ function App() {
 
   return (
     <>
-      <h2>Notes App</h2>
-      <NoteForm newNote={newNote} setNewNote={setNewNote} noteTitle={noteTitle} setNoteTitle={setNoteTitle} addNote={addNote} />
-      <NoteFilter filter={filter} setFilter={setFilter} />
-      {content}
+      <Navbar search={search} setSearch={setSearch} />
+      <main>
+        <NoteForm newNote={newNote} setNewNote={setNewNote} noteTitle={noteTitle} setNoteTitle={setNoteTitle} addNote={addNote} />
+        <NoteFilter filter={filter} setFilter={setFilter} />
+        {content}
+      </main>
     </>
   )
 }
