@@ -11,7 +11,7 @@ import NoteFilter from "./components/NoteFilter"
 import NoteSort from "./components/NoteSort"
 
 function App() {
-  // states
+  // States
   const [notes, setNotes] = useState<Note[]>(() => {
     try {
       const saved = localStorage.getItem("notes")
@@ -26,8 +26,10 @@ function App() {
   const [filter, setFilter] = useState<Filter>("All")
   const [sort, setSort] = useState<Sort>("Newest")
   const [search, setSearch] = useState<string>("")
+  const [editingNoteId, setEditingNoteId] = useState<number>()
+  const [editText, setEditText] = useState<string>("")
 
-  console.log(sort)
+  console.log(editText)
 
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes))
@@ -50,6 +52,18 @@ function App() {
     setNotes(prevNotes => [...prevNotes, newItem])
     setNoteTitle("")
     setNewNote("")
+  }
+
+  function handleSave(id: number): void {
+    setNotes(prevNotes =>
+      prevNotes.map(note =>
+        note.id === id
+        ? { ...note, note: editText } : note
+      )
+    )
+
+    setEditingNoteId(undefined)
+    setEditText("")
   }
 
   function deleteNote(id: number): void {
@@ -99,7 +113,16 @@ function App() {
     content = <p className="no-notes-message">No notes available.</p>
   } else {
     content = (
-      <NoteList notes={filteredNotes} toggleFavorites={toggleFavorites} deleteNote={deleteNote} />
+      <NoteList 
+        notes={filteredNotes} 
+        toggleFavorites={toggleFavorites} 
+        deleteNote={deleteNote} 
+        editingNoteId={editingNoteId}
+        setEditingNoteId={setEditingNoteId}
+        editText={editText}
+        setEditText={setEditText}
+        handleSave={handleSave}
+      />
     )
   }
 
