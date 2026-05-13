@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react"
-import type { Note, Filter } from "./types"
+
+// Types
+import type { Note, Filter, Sort } from "./types"
+
+// Components
 import Navbar from "./components/Navbar"
 import NoteList from "./components/NoteList"
 import NoteForm from "./components/NoteForm"
 import NoteFilter from "./components/NoteFilter"
+import NoteSort from "./components/NoteSort"
 
 function App() {
   // states
@@ -19,9 +24,10 @@ function App() {
   const [noteTitle, setNoteTitle] = useState<string>("")
   const [newNote, setNewNote] = useState<string>("")
   const [filter, setFilter] = useState<Filter>("All")
+  const [sort, setSort] = useState<Sort>("Newest")
   const [search, setSearch] = useState<string>("")
 
-  console.log(search)
+  console.log(sort)
 
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes))
@@ -37,7 +43,8 @@ function App() {
       id: Date.now(),
       title: noteTitle,
       note: newNote,
-      isFavorite: false
+      isFavorite: false,
+      createdAt: new Date().toISOString()
     }
 
     setNotes(prevNotes => [...prevNotes, newItem])
@@ -59,16 +66,32 @@ function App() {
     )
   }
 
-  const filteredNotes = notes.filter(note => {
-    const matchesFavorite =
-      filter === "Favorites" ? note.isFavorite : true
+  const filteredNotes = notes
+    .filter(note => {
+      const matchesFilter =
+        filter === "Favorites" ? note.isFavorite : true
 
-    const matchesSearch =
-      note.title.toLowerCase().includes(search.toLowerCase()) ||
-      note.note.toLowerCase().includes(search.toLowerCase())
+      const matchesSearch =
+        note.title.toLowerCase().includes(search.toLowerCase()) ||
+        note.note.toLowerCase().includes(search.toLowerCase())
 
-    return matchesFavorite && matchesSearch
-  })
+      return matchesFilter && matchesSearch
+    })
+    .sort((a, b) => {
+      if (sort === "Favorites") {
+        return Number(b.isFavorite) - Number(a.isFavorite)
+      }
+
+      if (sort === "Newest") {
+        return b.id - a.id
+      }
+
+      if (sort === "Oldest") {
+        return a.id - b.id
+      }
+
+      return 0
+    })
 
   let content
 
@@ -86,6 +109,7 @@ function App() {
       <main>
         <NoteForm newNote={newNote} setNewNote={setNewNote} noteTitle={noteTitle} setNoteTitle={setNoteTitle} addNote={addNote} />
         <NoteFilter filter={filter} setFilter={setFilter} />
+        <NoteSort sort={sort} setSort={setSort} />
         {content}
       </main>
     </>
