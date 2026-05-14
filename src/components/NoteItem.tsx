@@ -1,5 +1,9 @@
 import type { JSX } from "react"
 import type { Note } from "../types"
+
+// components
+import NoteEditForm from "./NoteEditForm"
+
 // icons
 import { IonIcon } from "@ionic/react"
 import { trashOutline, star, starOutline, createOutline } from "ionicons/icons"
@@ -12,10 +16,21 @@ type NoteItemProps = {
     setEditingNoteId: (id: number) => void
     editText: string
     setEditText: (value: string) => void
-    handleSave: (id: number) => void
+    handleSaveEdit: (id: number) => void
+    handleCancelEdit: () => void
 }
 
-function NoteItem({ note, deleteNote, toggleFavorites, editingNoteId, setEditingNoteId, editText, setEditText, handleSave }: NoteItemProps): JSX.Element {
+function NoteItem({ 
+            note, 
+            deleteNote, 
+            toggleFavorites, 
+            editingNoteId, 
+            setEditingNoteId, 
+            editText, 
+            setEditText, 
+            handleSaveEdit,
+            handleCancelEdit
+        }: NoteItemProps): JSX.Element {
     const checkboxId = `checkbox-${note.id}`
 
     return (
@@ -36,14 +51,13 @@ function NoteItem({ note, deleteNote, toggleFavorites, editingNoteId, setEditing
 
             {editingNoteId === note.id ? (
                 <>
-                    <input
-                        className="editInput"
-                        value={editText}
-                        onChange={(e) => setEditText(e.target.value)}
+                    <NoteEditForm 
+                        note={note} 
+                        editText={editText} 
+                        setEditText={setEditText} 
+                        handleSaveEdit={handleSaveEdit} 
+                        handleCancelEdit={handleCancelEdit}
                     />
-                    <button onClick={() => handleSave(note.id)}>
-                        Save
-                    </button>
                 </>
             ) : (
                 <>

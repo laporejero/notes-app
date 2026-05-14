@@ -54,7 +54,7 @@ function App() {
     setNewNote("")
   }
 
-  function handleSave(id: number): void {
+  function handleSaveEdit(id: number): void {
     setNotes(prevNotes =>
       prevNotes.map(note =>
         note.id === id
@@ -62,6 +62,11 @@ function App() {
       )
     )
 
+    setEditingNoteId(undefined)
+    setEditText("")
+  }
+
+  function handleCancelEdit():void {
     setEditingNoteId(undefined)
     setEditText("")
   }
@@ -121,7 +126,8 @@ function App() {
         setEditingNoteId={setEditingNoteId}
         editText={editText}
         setEditText={setEditText}
-        handleSave={handleSave}
+        handleSaveEdit={handleSaveEdit}
+        handleCancelEdit={handleCancelEdit}
       />
     )
   }
