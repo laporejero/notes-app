@@ -34,57 +34,46 @@ function NoteItem({
     const checkboxId = `checkbox-${note.id}`
 
     return (
-        <li className="note">
-            <h5>
-                {note.title}
-                <IonIcon 
-                    icon={note.isFavorite ? star : starOutline}
-                    id={checkboxId}
-                    style={{
-                        marginLeft: "1rem",
-                        fontSize: "1.5rem",
-                        color: note.isFavorite ? "gold" : ""
-                    }}
-                    onClick={() => toggleFavorites(note.id)} 
-                />
-            </h5>
-
-            {editingNoteId === note.id ? (
-                <>
+        <li className="note"> 
+            <h5> 
+                {note.title} 
+                <IonIcon icon={note.isFavorite ? star : starOutline} 
+                id={checkboxId} 
+                style={{ marginLeft: "1rem", fontSize: "1.5rem", color: note.isFavorite ? "gold" : "" }} 
+                onClick={() => toggleFavorites(note.id)} /> 
+            </h5> 
+            
+            {editingNoteId === note.id ? ( 
+                <> 
                     <NoteEditForm 
                         note={note} 
                         editText={editText} 
                         setEditText={setEditText} 
                         handleSaveEdit={handleSaveEdit} 
-                        handleCancelEdit={handleCancelEdit}
-                    />
-                </>
-            ) : (
-                <>
-                    <p>{note.note}</p>
-                    <div className="icons">
+                        handleCancelEdit={handleCancelEdit} 
+                    /> 
+                </> ) : ( 
+                <> 
+                    <p 
+                        className="note-content" 
+                        style={{ visibility: editingNoteId === note.id ? "hidden" : "visible" }} 
+                    > 
+                        {note.note} 
+                    </p> 
+                    <div className="icons"> 
                         <IonIcon 
-                            icon={createOutline}
-                            style={{
-                                fontSize: '1.8rem',
-                                cursor: 'pointer'
-                            }}
-                            onClick={() => {
-                                setEditingNoteId(note.id)
-                                setEditText(note.note)
-                            }}
-                        />
+                            icon={createOutline} 
+                            style={{ fontSize: '1.8rem', cursor: 'pointer' }} 
+                            onClick={() => { setEditingNoteId(note.id), setEditText(note.note) }} 
+                        /> 
                         <IonIcon 
-                            icon={trashOutline}
-                            style={{
-                                fontSize: '1.8rem',
-                                cursor: 'pointer'
-                            }}
-                            onClick={() => deleteNote(note.id)}
-                        />
-                    </div>
-                </>
-            )}
+                            icon={trashOutline} 
+                            style={{ fontSize: '1.8rem', cursor: 'pointer' }} 
+                            onClick={() => deleteNote(note.id)} 
+                        /> 
+                    </div> 
+                </> 
+            )} 
         </li>
     )
 }

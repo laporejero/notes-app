@@ -12,18 +12,20 @@ type NoteEditFormProps = {
 function NoteEditForm({ note, editText, setEditText, handleSaveEdit, handleCancelEdit }: NoteEditFormProps): JSX.Element {
     return (
         <form className="edit-form">
-            <input
+            <textarea
                 className="editInput"
                 value={editText}
                 onChange={(e) => setEditText(e.target.value)}
             />
             <button 
+                type="button"
                 className="edit-form-btn"
                 onClick={() => handleSaveEdit(note.id)}
             >
                 Save
             </button>
             <button 
+                type="button"
                 className="edit-form-btn"
                 onClick={() => handleCancelEdit()}
             >
