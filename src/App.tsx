@@ -21,8 +21,6 @@ function App() {
       return []
     }
   })
-  const [noteTitle, setNoteTitle] = useState<string>("")
-  const [newNote, setNewNote] = useState<string>("")
   const [filter, setFilter] = useState<Filter>("All")
   const [sort, setSort] = useState<Sort>("Newest")
   const [search, setSearch] = useState<string>("")
@@ -35,23 +33,20 @@ function App() {
     localStorage.setItem("notes", JSON.stringify(notes))
   }, [notes])
 
-  function addNote(): void {
-    if (!noteTitle.trim() || !newNote.trim()) {
+  function addNote(title: string, body: string): void {
+    if (!title.trim() || !body.trim()) {
       alert("Invalid input")
       return
     }
 
     const newItem: Note = {
       id: Date.now(),
-      title: noteTitle,
-      note: newNote,
+      title: title,
+      note: body,
       isFavorite: false,
-      createdAt: new Date().toISOString()
     }
 
     setNotes(prevNotes => [...prevNotes, newItem])
-    setNoteTitle("")
-    setNewNote("")
   }
 
   function handleSaveEdit(id: number): void {
@@ -136,7 +131,7 @@ function App() {
     <>
       <Navbar search={search} setSearch={setSearch} />
       <main>
-        <NoteForm newNote={newNote} setNewNote={setNewNote} noteTitle={noteTitle} setNoteTitle={setNoteTitle} addNote={addNote} />
+        <NoteForm addNote={addNote} />
         <NoteFilter filter={filter} setFilter={setFilter} />
         <NoteSort sort={sort} setSort={setSort} />
         {content}

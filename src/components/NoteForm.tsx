@@ -1,14 +1,14 @@
+import { useState } from "react"
 import type { JSX } from "react"
 
 type NoteFormProps = {
-    newNote: string
-    setNewNote: (value: string) => void
-    noteTitle: string
-    setNoteTitle: (value: string) => void
-    addNote: () => void
+    addNote: (title: string, body: string) => void
 }
 
-function NoteForm({ newNote, setNewNote, noteTitle, setNoteTitle, addNote }: NoteFormProps): JSX.Element {
+function NoteForm({ addNote }: NoteFormProps): JSX.Element {
+    const [noteTitle, setNoteTitle] = useState<string>("")
+    const [noteBody, setNoteBody] = useState<string>("")
+
     return (
         <form className="note-form" onSubmit={(e) => e.preventDefault()}>
             <input 
@@ -20,10 +20,18 @@ function NoteForm({ newNote, setNewNote, noteTitle, setNoteTitle, addNote }: Not
             <input 
                 type="text" 
                 placeholder="Take a note..."
-                value={newNote}
-                onChange={(e) => setNewNote(e.target.value)}
+                value={noteBody}
+                onChange={(e) => setNoteBody(e.target.value)}
             />
-            <button onClick={addNote}>Add Note</button>
+            <button 
+                onClick={() => {
+                    addNote(noteTitle, noteBody),
+                    setNoteTitle("")
+                    setNoteBody("")
+                }}
+            >
+                Add Note
+            </button>
         </form>
     )
 }

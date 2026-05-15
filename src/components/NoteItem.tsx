@@ -54,10 +54,7 @@ function NoteItem({
                     /> 
                 </> ) : ( 
                 <> 
-                    <p 
-                        className="note-content" 
-                        style={{ visibility: editingNoteId === note.id ? "hidden" : "visible" }} 
-                    > 
+                    <p className="note-content" > 
                         {note.note} 
                     </p> 
                     <div className="icons"> 
