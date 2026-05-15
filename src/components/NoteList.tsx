@@ -6,24 +6,14 @@ type NoteListProps = {
     notes: Note[]
     deleteNote: (id: number) => void
     toggleFavorites: (id: number) => void
-    editingNoteId: number | undefined
-    setEditingNoteId: (id: number) => void
-    editText: string
-    setEditText: (value: string) => void
-    handleSaveEdit: (id: number) => void
-    handleCancelEdit: () => void
+    handleUpdateNote: (id: number, updatedText: string) => void
 }
 
 function NoteList({ 
             notes, 
             deleteNote, 
             toggleFavorites, 
-            editingNoteId, 
-            setEditingNoteId, 
-            editText, 
-            setEditText, 
-            handleSaveEdit, 
-            handleCancelEdit 
+            handleUpdateNote
         }: NoteListProps): JSX.Element {
     return (
         <div className="note-list-container">
@@ -34,12 +24,7 @@ function NoteList({
                         note={note} 
                         toggleFavorites={toggleFavorites} 
                         deleteNote={deleteNote} 
-                        editingNoteId={editingNoteId}
-                        setEditingNoteId={setEditingNoteId}
-                        editText={editText}
-                        setEditText={setEditText}
-                        handleSaveEdit={handleSaveEdit}
-                        handleCancelEdit={handleCancelEdit}
+                        handleUpdateNote={handleUpdateNote}
                     />
                 ))}
             </ul>

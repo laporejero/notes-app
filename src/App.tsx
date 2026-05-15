@@ -24,10 +24,6 @@ function App() {
   const [filter, setFilter] = useState<Filter>("All")
   const [sort, setSort] = useState<Sort>("Newest")
   const [search, setSearch] = useState<string>("")
-  const [editingNoteId, setEditingNoteId] = useState<number>()
-  const [editText, setEditText] = useState<string>("")
-
-  console.log(editText)
 
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes))
@@ -49,23 +45,6 @@ function App() {
     setNotes(prevNotes => [...prevNotes, newItem])
   }
 
-  function handleSaveEdit(id: number): void {
-    setNotes(prevNotes =>
-      prevNotes.map(note =>
-        note.id === id
-        ? { ...note, note: editText } : note
-      )
-    )
-
-    setEditingNoteId(undefined)
-    setEditText("")
-  }
-
-  function handleCancelEdit():void {
-    setEditingNoteId(undefined)
-    setEditText("")
-  }
-
   function deleteNote(id: number): void {
     setNotes(prevNotes => 
       prevNotes.filter(note => note.id !== id)
@@ -79,6 +58,15 @@ function App() {
       )
     )
   }
+
+  function handleUpdateNote(id: number, updatedText: string): void {
+        setNotes(prevNotes =>
+        prevNotes.map(note =>
+            note.id === id
+            ? { ...note, note: updatedText } : note
+        )
+        )
+    }
 
   const filteredNotes = notes
     .filter(note => {
@@ -117,12 +105,7 @@ function App() {
         notes={filteredNotes} 
         toggleFavorites={toggleFavorites} 
         deleteNote={deleteNote} 
-        editingNoteId={editingNoteId}
-        setEditingNoteId={setEditingNoteId}
-        editText={editText}
-        setEditText={setEditText}
-        handleSaveEdit={handleSaveEdit}
-        handleCancelEdit={handleCancelEdit}
+        handleUpdateNote={handleUpdateNote}
       />
     )
   }

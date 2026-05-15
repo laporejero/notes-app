@@ -1,3 +1,4 @@
+import { useState } from "react"
 import type { JSX } from "react"
 import type { Note } from "../types"
 
@@ -12,26 +13,25 @@ type NoteItemProps = {
     note: Note
     deleteNote: (id: number) => void
     toggleFavorites: (id: number) => void
-    editingNoteId: number | undefined
-    setEditingNoteId: (id: number) => void
-    editText: string
-    setEditText: (value: string) => void
-    handleSaveEdit: (id: number) => void
-    handleCancelEdit: () => void
+    handleUpdateNote: (id: number, updatedText: string) => void
 }
 
-function NoteItem({ 
-            note, 
-            deleteNote, 
-            toggleFavorites, 
-            editingNoteId, 
-            setEditingNoteId, 
-            editText, 
-            setEditText, 
-            handleSaveEdit,
-            handleCancelEdit
-        }: NoteItemProps): JSX.Element {
+function NoteItem({ note, deleteNote, toggleFavorites, handleUpdateNote }: NoteItemProps): JSX.Element {
+
+    const [editingNoteId, setEditingNoteId] = useState<number>()
+    const [editText, setEditText] = useState<string>("")
     const checkboxId = `checkbox-${note.id}`
+
+    function handleSave():void {
+        handleUpdateNote(note.id, editText)
+        setEditingNoteId(undefined)
+        setEditText("")
+    }
+
+    function handleCancel():void {
+        setEditingNoteId(undefined)
+        setEditText(note.note)
+    }
 
     return (
         <li className="note"> 
@@ -49,8 +49,8 @@ function NoteItem({
                         note={note} 
                         editText={editText} 
                         setEditText={setEditText} 
-                        handleSaveEdit={handleSaveEdit} 
-                        handleCancelEdit={handleCancelEdit} 
+                        handleSave={handleSave}
+                        handleCancel={handleCancel} 
                     /> 
                 </> ) : ( 
                 <> 

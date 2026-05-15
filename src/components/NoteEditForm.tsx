@@ -5,11 +5,11 @@ type NoteEditFormProps = {
     note: Note
     editText: string
     setEditText: (v: string) => void
-    handleSaveEdit: (id: number) => void
-    handleCancelEdit: () => void
+    handleSave: () => void
+    handleCancel: () => void
 }
 
-function NoteEditForm({ note, editText, setEditText, handleSaveEdit, handleCancelEdit }: NoteEditFormProps): JSX.Element {
+function NoteEditForm({ note, editText, setEditText, handleSave, handleCancel }: NoteEditFormProps): JSX.Element {
     return (
         <form className="edit-form">
             <textarea
@@ -20,14 +20,14 @@ function NoteEditForm({ note, editText, setEditText, handleSaveEdit, handleCance
             <button 
                 type="button"
                 className="edit-form-btn"
-                onClick={() => handleSaveEdit(note.id)}
+                onClick={() => handleSave()}
             >
                 Save
             </button>
             <button 
                 type="button"
                 className="edit-form-btn"
-                onClick={() => handleCancelEdit()}
+                onClick={() => handleCancel()}
             >
                 Cancel
             </button>
