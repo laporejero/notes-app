@@ -3,6 +3,7 @@ export type Note = {
     title: string
     note: string
     isFavorite: boolean
+    pinned: boolean
 }
 
 export type Filter = "All" | "Favorites"

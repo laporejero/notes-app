@@ -1,15 +1,13 @@
 import type { JSX } from "react"
-import type { Note } from "../types"
 
 type NoteEditFormProps = {
-    note: Note
     editText: string
     setEditText: (v: string) => void
     handleSave: () => void
     handleCancel: () => void
 }
 
-function NoteEditForm({ note, editText, setEditText, handleSave, handleCancel }: NoteEditFormProps): JSX.Element {
+function NoteEditForm({ editText, setEditText, handleSave, handleCancel }: NoteEditFormProps): JSX.Element {
     return (
         <form className="edit-form">
             <textarea

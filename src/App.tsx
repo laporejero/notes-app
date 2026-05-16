@@ -25,10 +25,12 @@ function App() {
   const [sort, setSort] = useState<Sort>("Newest")
   const [search, setSearch] = useState<string>("")
 
+  // Update localStorage everytime state variable notes change
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes))
   }, [notes])
 
+  // Add Note function
   function addNote(title: string, body: string): void {
     if (!title.trim() || !body.trim()) {
       alert("Invalid input")
@@ -40,6 +42,7 @@ function App() {
       title: title,
       note: body,
       isFavorite: false,
+      pinned: false
     }
 
     setNotes(prevNotes => [...prevNotes, newItem])
@@ -51,6 +54,7 @@ function App() {
     )
   }
 
+  // Toggle Favorite note function
   function toggleFavorites(id: number): void {
     setNotes(prevNotes =>
       prevNotes.map(note => 
@@ -59,15 +63,26 @@ function App() {
     )
   }
 
-  function handleUpdateNote(id: number, updatedText: string): void {
-        setNotes(prevNotes =>
-        prevNotes.map(note =>
-            note.id === id
-            ? { ...note, note: updatedText } : note
-        )
-        )
-    }
+  // Toggle Pin note function
+  function togglePin(id: number) {
+    setNotes(prevNotes =>
+      prevNotes.map(note =>
+        note.id === id ? { ...note, pinned: !note.pinned } : note
+      )
+    )
+  }
 
+  // Update note function
+  function handleUpdateNote(id: number, updatedText: string): void {
+    setNotes(prevNotes =>
+    prevNotes.map(note =>
+        note.id === id
+        ? { ...note, note: updatedText } : note
+      )
+    )
+  }
+
+  // Filter & Sort Notes list
   const filteredNotes = notes
     .filter(note => {
       const matchesFilter =
@@ -80,6 +95,10 @@ function App() {
       return matchesFilter && matchesSearch
     })
     .sort((a, b) => {
+      if (b.pinned !== a.pinned) {
+        return Number(b.pinned) - Number(a. pinned)
+      }
+
       if (sort === "Favorites") {
         return Number(b.isFavorite) - Number(a.isFavorite)
       }
@@ -95,14 +114,15 @@ function App() {
       return 0
     })
 
+  // Conditional rendering for Note list
   let content
-
   if (filteredNotes.length === 0) {
     content = <p className="no-notes-message">No notes available.</p>
   } else {
     content = (
       <NoteList 
         notes={filteredNotes} 
+        togglePin={togglePin}
         toggleFavorites={toggleFavorites} 
         deleteNote={deleteNote} 
         handleUpdateNote={handleUpdateNote}

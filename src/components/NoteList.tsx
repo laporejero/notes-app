@@ -5,6 +5,7 @@ import NoteItem from "./NoteItem"
 type NoteListProps = {
     notes: Note[]
     deleteNote: (id: number) => void
+    togglePin: (id: number) => void
     toggleFavorites: (id: number) => void
     handleUpdateNote: (id: number, updatedText: string) => void
 }
@@ -12,6 +13,7 @@ type NoteListProps = {
 function NoteList({ 
             notes, 
             deleteNote, 
+            togglePin,
             toggleFavorites, 
             handleUpdateNote
         }: NoteListProps): JSX.Element {
@@ -22,6 +24,7 @@ function NoteList({
                     <NoteItem 
                         key={note.id} 
                         note={note} 
+                        togglePin={togglePin}
                         toggleFavorites={toggleFavorites} 
                         deleteNote={deleteNote} 
                         handleUpdateNote={handleUpdateNote}

@@ -7,16 +7,17 @@ import NoteEditForm from "./NoteEditForm"
 
 // icons
 import { IonIcon } from "@ionic/react"
-import { trashOutline, star, starOutline, createOutline } from "ionicons/icons"
+import { trashOutline, star, starOutline, createOutline, bookmark, bookmarkOutline } from "ionicons/icons"
 
 type NoteItemProps = {
     note: Note
     deleteNote: (id: number) => void
+    togglePin: (id: number) => void
     toggleFavorites: (id: number) => void
     handleUpdateNote: (id: number, updatedText: string) => void
 }
 
-function NoteItem({ note, deleteNote, toggleFavorites, handleUpdateNote }: NoteItemProps): JSX.Element {
+function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNote }: NoteItemProps): JSX.Element {
 
     const [editingNoteId, setEditingNoteId] = useState<number>()
     const [editText, setEditText] = useState<string>("")
@@ -37,16 +38,23 @@ function NoteItem({ note, deleteNote, toggleFavorites, handleUpdateNote }: NoteI
         <li className="note"> 
             <h5> 
                 {note.title} 
-                <IonIcon icon={note.isFavorite ? star : starOutline} 
-                id={checkboxId} 
-                style={{ marginLeft: "1rem", fontSize: "1.5rem", color: note.isFavorite ? "gold" : "" }} 
-                onClick={() => toggleFavorites(note.id)} /> 
+                {/* Star button */}
+                <IonIcon 
+                    icon={note.isFavorite ? star : starOutline} 
+                    id={checkboxId} 
+                    style={{ marginLeft: "1rem", fontSize: "1.5rem", color: note.isFavorite ? "gold" : "" }} 
+                    onClick={() => toggleFavorites(note.id)} /> 
+                {/* Pin button */}
+                <IonIcon 
+                    icon={note.pinned ? bookmark : bookmarkOutline}
+                    style={{ marginLeft: "1rem", fontSize: "1.5rem" }}
+                    onClick={() => togglePin(note.id)}
+                />
             </h5> 
             
             {editingNoteId === note.id ? ( 
                 <> 
                     <NoteEditForm 
-                        note={note} 
                         editText={editText} 
                         setEditText={setEditText} 
                         handleSave={handleSave}
