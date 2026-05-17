@@ -212,6 +212,7 @@ button:hover {
 .note > .editInput,
 .edit-form textarea {
     width: 100%;
+    font-family: var(--font-family);
     background-color: #191919;
     color: rgb(232, 232, 232);
     border: 1px solid rgb(165, 165, 165);
@@ -220,4 +221,81 @@ button:hover {
     font-weight: 500;
     resize: vertical;
     min-height: 20rem;
+}
+
+/* MODAL */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #191919;
+    color: rgb(232, 232, 232);
+    padding: 2.5rem;
+    border: 1px solid rgb(165, 165, 165);
+    border-radius: 5px;
+    position: relative;
+    max-width: 60rem;
+    width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    font-family: var(--font-family);
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Modifies the h5 layout specifically inside the modal header row */
+.modal-content h5 {
+    font-size: var(--text-h5);
+    padding: 3rem;
+    display: flex;
+    align-items: center;
+}
+
+.modal-content .note-content {
+    font-size: var(--text-paragraph);
+    line-height: var(--line-height-normal);
+    white-space: pre-wrap; /* Keeps user paragraph line-breaks preserved */
+}
+
+/* Modal Actions Footer row matching your `.note > .icons` layout style */
+.modal-content .icons {
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    color: rgb(165, 165, 165);
+}
+
+.modal-content .icons ion-icon:hover {
+    color: rgb(232, 232, 232);
+    cursor: pointer;
+}
+
+/* Modal Specific Close button text layout */
+.modal-close-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: rgb(165, 165, 165);
+    font-size: 2.8rem;
+    line-height: 0.5;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.modal-close-btn:hover {
+    color: rgb(232, 232, 232);
 }
