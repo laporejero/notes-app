@@ -8,10 +8,11 @@ type NoteSortProps = {
 
 function NoteSort({ sort, setSort }: NoteSortProps): JSX.Element {
     return (
-        <form>
-            <label>
+        <form className="control-group">
+            <label className="sort-select">
                 <span>Sort: </span>
                 <select 
+                    id="sort-select"
                     value={sort} 
                     onChange={(e) => setSort(e.target.value as Sort)}
                 >

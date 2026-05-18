@@ -8,10 +8,11 @@ type NoteFilterProps = {
 
 function NoteFilter({ filter, setFilter }: NoteFilterProps): JSX.Element {
     return (
-        <form>
-            <label>
+        <form className="control-group">
+            <label htmlFor="filter-select">
                 <span>Show notes: </span>
                 <select 
+                    id="filter-select"
                     value={filter} 
                     onChange={e => setFilter(e.target.value as Filter)}
                 >

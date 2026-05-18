@@ -223,6 +223,51 @@ button:hover {
     min-height: 20rem;
 }
 
+/* CONTROLS */
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 1.5rem 0;
+}
+
+.control-group label {
+    font-size: var(--text-base);
+    font-weight: 500;
+    color: rgb(165, 165, 165);
+}
+
+.control-group select {
+    font-family: var(--font-family);
+    font-size: var(--text-base);
+    background-color: #191919;
+    color: rgb(232, 232, 232);
+    border: 1px solid rgb(165, 165, 165);
+    border-radius: 5px;
+    padding: 0.4rem 2.5rem 0.4rem 0.8rem;
+    cursor: pointer;
+    font-weight: var(--font-weight-normal);
+    outline: none;
+
+    appearance: none;
+    --webkit-appearance: none;
+    --moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgb(165, 165, 165)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right 0.6rem center;
+    background-size: 1.4rem;
+}
+
+.control-group select:focus,
+.control-group select:hover {
+    border-color: rgb(232, 232, 232);
+}
+
+.control-group select option {
+    background-color: #191919;
+    color: rgb(232, 232, 232);
+}
+
 /* MODAL */
 .modal-overlay {
     position: fixed;
