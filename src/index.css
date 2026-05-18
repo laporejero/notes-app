@@ -97,7 +97,8 @@ main {
 .navbar input {
     font-size: var(--text-base);
     background-color: #191919;
-    width: 50rem;
+    width: 100%;
+    max-width: 50rem;
     color: rgb(232, 232, 232);
     border: 1px solid rgb(165, 165, 165);
     border-radius: 1rem;
@@ -111,7 +112,8 @@ hr {
 
 /* NOTE FORM */
 .note-form {
-    width: 60rem;
+    width: 100%;
+    max-width: 60rem;
     margin: 2rem auto 0;
     padding: 1.5rem;
     border: 1px solid rgb(165, 165, 165);
@@ -350,4 +352,55 @@ button:hover {
 
 .modal-close-btn:hover {
     color: rgb(232, 232, 232);
+}
+
+/* -------- RESPONSIVE MEDIA QUERIES -------- */
+
+/* TABLET (max-width: 768px) */
+@media (max-width: 76.8rem) {
+    html {
+        font-size: 56.25%; /* 9px */
+    }
+
+    .navbar {
+        gap: 2.5rem;
+        padding: 1.5rem;
+    }
+
+    .control-group {
+        margin: 1rem 1rem;
+    }
+}
+
+/* MOBILE (max-width: 480px) */
+@media (max-width: 48rem) {
+    html {
+        font-size: 50%; /* 8px */
+    }
+
+    .navbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+
+    .navbar input {
+        max-width: 100%;
+    }
+
+    main > div[style*="display: flex"] {
+        flex-direction: column !important;
+        gap: 1rem !important;
+        padding: 1.5rem !important;
+    }
+
+    .note-list-container {
+        padding: 1.5rem 1rem;
+        column-width: 100%;
+    }
+
+    .note-form {
+        max-width: 90%;
+    }
 }
