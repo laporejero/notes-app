@@ -17,7 +17,6 @@ function Navbar({ search, setSearch }: NavbarProps): JSX.Element {
                     onChange={(e) => setSearch(e.target.value)}
                 />
             </nav>
-            <hr />
         </>
     )
 }
