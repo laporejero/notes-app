@@ -1,73 +1,34 @@
-# React + TypeScript + Vite
+# Notes App
+A Notes App built with React and TypeScript featuring full CRUD capabilities, pin priority, favorite toggles, and localStorage persistence.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Features:
+- Add new notes with a dynamic form
+- Edit and Delete individual notes
+- Pin notes to lock them permanently to the top of your feed
+- Toggle favorite stars on important notes
+- Filter notes easily (All / Favorites)
+- Live search query filtering through titles and bodies simultaneously
+- Custom masonry layout for a fluid note feed
+- LocalStorage state persistence
+- Fully responsive mobile and tablet design
 
-Currently, two official plugins are available:
+## Tech stack:
+- React
+- TypeScript
+- CSS (Native Custom Variables)
+- Vite
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## What I learned:
+This project improved my understanding of component structure by organizing code into smaller, manageable blocks, it becomes easier to update, modify, or fix one part of the app without disrupting others.
 
-## React Compiler
+In this project, I learned how to sort and organize data using multiple rules at once. For example, I figured out how to make pinned notes always stay at the very top of the list, even when the user switches between showing the newest, oldest, or favorite notes.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Lastly, what I learned about is the state persistence. React's state resets on every page reload and getting a state from localStorage allows you to save that state so the data is still there when the user returns or reloads the app.
 
-## Expanding the ESLint configuration
+Overall, this project helped me better understand how to structure React applications, manage state properly, and think more carefully about frontend architecture and UI behavior.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+<img width="1902" height="928" alt="web-view" src="https://github.com/user-attachments/assets/f3444933-ff73-43de-80a7-d1398be0202f" />
+<img width="1904" height="929" alt="web-modal-view" src="https://github.com/user-attachments/assets/bdfcf8e9-2513-4e76-95ed-eb0ca6624e18" />
+<img width="392" height="844" alt="mobile-view" src="https://github.com/user-attachments/assets/4f832136-aa03-42a4-a265-20fcf1791355" />
+<img width="387" height="841" alt="mobile-edit-view" src="https://github.com/user-attachments/assets/c78ff8c8-1677-4cd9-8f50-168a9db6fd9d" />
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
