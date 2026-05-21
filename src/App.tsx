@@ -86,7 +86,9 @@ function App() {
   const filteredNotes = notes
     .filter(note => {
       const matchesFilter =
-        filter === "Favorites" ? note.isFavorite : true
+        filter === "Favorites" ? note.isFavorite :
+        filter === "Pinned" ? note.pinned : 
+        true
 
       const matchesSearch =
         note.title.toLowerCase().includes(search.toLowerCase()) ||

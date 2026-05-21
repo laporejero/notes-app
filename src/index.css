@@ -33,6 +33,7 @@
 html {
     font-size: 62.5%; /* 10px */
     font-family: var(--font-family);
+    scroll-behavior: smooth;
 }
 
 body {
@@ -176,10 +177,28 @@ button:hover {
     padding: 1.5rem;
     margin-bottom: 1.5rem;
     break-inside: avoid;
+
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
+
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+
+    transition: 
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+
+    animation: fadeSlideUp 0.25s ease;
+}
+
+.note:hover {
+    transform: translateY(-3px);
+    border-color: rgb(232, 232, 232);
+
+    box-shadow: 
+        0 8px 2.4rem rgba(0, 0, 0, 0.35),
+        0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .note > .editInput {
@@ -277,6 +296,63 @@ button:hover {
     color: rgb(232, 232, 232);
 }
 
+/* ---------- ANIMATIONS ---------- */
+/* INPUT FOCUS GLOW */
+.navbar input,
+.note-form input,
+.note > .editInput,
+.edit-form textarea,
+.control-group select {
+    transition: 
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.navbar input:focus,
+.note-form input:focus,
+.note > .editInput:focus,
+.edit-form textarea:focus,
+.control-group select:focus {
+    border-color: rgb(232, 232, 232);
+    box-shadow: 0 0 0 3px rgba(232, 232, 232, 0.08);
+    transform: scale(1.01);
+}
+
+button {
+    transition: 
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.1s ease;
+}
+
+button:active {
+    transform: scale(0.96);
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.note ion-icon,
+.modal-content .icons ion-icon {
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.note ion-icon:hover,
+.modal-content .icons ion-icon:hover {
+    transform: scale(1.15);
+}
+
 /* MODAL */
 .modal-overlay {
     position: fixed;
@@ -285,6 +361,7 @@ button:hover {
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.75);
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -352,55 +429,4 @@ button:hover {
 
 .modal-close-btn:hover {
     color: rgb(232, 232, 232);
-}
-
-/* -------- RESPONSIVE MEDIA QUERIES -------- */
-
-/* TABLET (max-width: 768px) */
-@media (max-width: 76.8rem) {
-    html {
-        font-size: 56.25%; /* 9px */
-    }
-
-    .navbar {
-        gap: 2.5rem;
-        padding: 1.5rem;
-    }
-
-    .control-group {
-        margin: 1rem 1rem;
-    }
-}
-
-/* MOBILE (max-width: 480px) */
-@media (max-width: 48rem) {
-    html {
-        font-size: 50%; /* 8px */
-    }
-
-    .navbar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 1.5rem;
-        padding: 1.5rem;
-    }
-
-    .navbar input {
-        max-width: 100%;
-    }
-
-    main > div[style*="display: flex"] {
-        flex-direction: column !important;
-        gap: 1rem !important;
-        padding: 1.5rem !important;
-    }
-
-    .note-list-container {
-        padding: 1.5rem 1rem;
-        column-width: 100%;
-    }
-
-    .note-form {
-        max-width: 90%;
-    }
 }

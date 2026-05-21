@@ -18,6 +18,7 @@ function NoteFilter({ filter, setFilter }: NoteFilterProps): JSX.Element {
                 >
                     <option value="All">All</option>
                     <option value="Favorites">Favorites</option>
+                    <option value="Pinned">Pinned</option>
                 </select>
             </label>
         </form>

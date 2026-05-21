@@ -6,6 +6,6 @@ export type Note = {
     pinned: boolean
 }
 
-export type Filter = "All" | "Favorites"
+export type Filter = "All" | "Favorites" | "Pinned"
 
 export type Sort = "Newest" | "Oldest" | "Favorites"
