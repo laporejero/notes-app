@@ -1,7 +1,7 @@
 import { useState } from "react"
 import type { JSX } from "react"
 import type { Note } from "../types"
-import Modal from "./Modal"
+import Modal from "./Modal/Modal"
 
 // components
 import NoteEditForm from "./NoteEditForm"
@@ -37,6 +37,42 @@ function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNo
         setEditText(note.note)
     }
 
+    function NoteTitle() {
+        return (
+            <h5> 
+                {note.title} 
+                {/* Star button */}
+                <IonIcon 
+                    icon={note.isFavorite ? star : starOutline} 
+                    id={checkboxId} 
+                    style={{ 
+                        marginLeft: "1rem", 
+                        fontSize: "1.5rem", 
+                        color: note.isFavorite ? "gold" : "",
+                        cursor: "pointer"
+                    }} 
+                    onClick={(e) => { 
+                        e.stopPropagation()
+                        toggleFavorites(note.id)
+                    }} 
+                /> 
+                {/* Pin button */}
+                <IonIcon 
+                    icon={note.pinned ? bookmark : bookmarkOutline}
+                    style={{ 
+                        marginLeft: "1rem", 
+                        fontSize: "1.5rem",
+                        cursor: "pointer"
+                    }}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        togglePin(note.id)
+                    }}
+                />
+            </h5> 
+        )
+    }
+
     return (
         <>
             {/* 1. THE VISIBLE CARD PREVIEW */}
@@ -45,53 +81,15 @@ function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNo
                 onClick={() => setIsModalOpen(true)}
                 style={{ cursor: 'pointer' }}
             > 
-                <h5> 
-                    {note.title} 
-                    {note.isFavorite && <IonIcon icon={star} style={{ color: "gold", marginLeft: "0.5rem", fontSize: "1.5rem" }} />}
-                    {note.pinned && <IonIcon icon={bookmark} style={{ marginLeft: "0.5rem", color: "#ccc", fontSize: "1.5rem" }} />}
-                </h5> 
+                <NoteTitle />
                 <p className="note-preview-text"> 
                     {note.note} 
                 </p>
-                {/* <div className="note-card-footer" style={{ marginTop: "1rem", display: "flex", gap: "0.5rem", opacity: 0.6 }}>
-                    <IonIcon icon={createOutline} />
-                    <IonIcon icon={trashOutline} />
-                </div> */}
             </li>
 
             {/* 2. THE POPUP MODAL DETAILED VIEW */}
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} >
-                <h5> 
-                    {note.title} 
-                    {/* Star button */}
-                    <IonIcon 
-                        icon={note.isFavorite ? star : starOutline} 
-                        id={checkboxId} 
-                        style={{ 
-                            marginLeft: "1rem", 
-                            fontSize: "1.5rem", 
-                            color: note.isFavorite ? "gold" : "",
-                            cursor: "pointer"
-                        }} 
-                        onClick={(e) => { 
-                            e.stopPropagation()
-                            toggleFavorites(note.id)
-                        }} 
-                    /> 
-                    {/* Pin button */}
-                    <IonIcon 
-                        icon={note.pinned ? bookmark : bookmarkOutline}
-                        style={{ 
-                            marginLeft: "1rem", 
-                            fontSize: "1.5rem",
-                            cursor: "pointer"
-                        }}
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            togglePin(note.id)
-                        }}
-                    />
-                </h5> 
+                <NoteTitle />
                 
                 {editingNoteId === note.id ? ( 
                     <NoteEditForm 
