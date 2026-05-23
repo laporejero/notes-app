@@ -31,7 +31,7 @@ function App() {
   }, [notes])
 
   // Add Note function
-  function addNote(title: string, body: string): void {
+  function addNote(title:string, body:string):void {
     if (!title.trim() || !body.trim()) {
       alert("Invalid input")
       return
@@ -48,14 +48,14 @@ function App() {
     setNotes(prevNotes => [...prevNotes, newItem])
   }
 
-  function deleteNote(id: number): void {
+  function deleteNote(id:number):void {
     setNotes(prevNotes => 
       prevNotes.filter(note => note.id !== id)
     )
   }
 
   // Toggle Favorite note function
-  function toggleFavorites(id: number): void {
+  function toggleFavorites(id:number):void {
     setNotes(prevNotes =>
       prevNotes.map(note => 
         note.id === id ? { ...note, isFavorite: !note.isFavorite } : note
@@ -64,7 +64,7 @@ function App() {
   }
 
   // Toggle Pin note function
-  function togglePin(id: number) {
+  function togglePin(id:number):void {
     setNotes(prevNotes =>
       prevNotes.map(note =>
         note.id === id ? { ...note, pinned: !note.pinned } : note
@@ -73,11 +73,11 @@ function App() {
   }
 
   // Update note function
-  function handleUpdateNote(id: number, updatedText: string): void {
+  function handleUpdateNote(id:number, updatedTitle:string, updatedText:string):void {
     setNotes(prevNotes =>
     prevNotes.map(note =>
         note.id === id
-        ? { ...note, note: updatedText } : note
+        ? { ...note, title: updatedTitle, note: updatedText } : note
       )
     )
   }

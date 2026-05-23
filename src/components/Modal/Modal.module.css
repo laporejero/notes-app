@@ -20,7 +20,7 @@
     border: 1px solid rgb(165, 165, 165);
     border-radius: 5px;
     position: relative;
-    max-width: 60rem;
+    max-width: 80rem;
     width: 90%;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
     font-family: var(--font-family);
@@ -51,11 +51,16 @@
     align-items: center;
     gap: 1.5rem;
     color: rgb(165, 165, 165);
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
 }
 
 .modalContent :global(.icons) ion-icon:hover {
     color: rgb(232, 232, 232);
     cursor: pointer;
+    transform: scale(1.15);
 }
 
 /* Modal Specific Close button text layout */
@@ -70,8 +75,4 @@
     line-height: 0.5;
     cursor: pointer;
     transition: color 0.2s ease;
-}
-
-.modalCloseBtn:hover {
-    color: rgb(232, 232, 232);
 }

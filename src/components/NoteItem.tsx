@@ -15,25 +15,28 @@ type NoteItemProps = {
     deleteNote: (id: number) => void
     togglePin: (id: number) => void
     toggleFavorites: (id: number) => void
-    handleUpdateNote: (id: number, updatedText: string) => void
+    handleUpdateNote: (id: number, updatedTitle: string, updatedText: string) => void
 }
 
 function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNote }: NoteItemProps): JSX.Element {
 
     const [editingNoteId, setEditingNoteId] = useState<number>()
+    const [editTitle, setEditTitle] = useState<string>("")
     const [editText, setEditText] = useState<string>("")
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
     const checkboxId = `checkbox-${note.id}`
 
     function handleSave():void {
-        handleUpdateNote(note.id, editText)
+        handleUpdateNote(note.id, editTitle, editText)
         setEditingNoteId(undefined)
+        setEditTitle("")
         setEditText("")
     }
 
     function handleCancel():void {
         setEditingNoteId(undefined)
+        setEditTitle(note.title)
         setEditText(note.note)
     }
 
@@ -47,7 +50,7 @@ function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNo
                     id={checkboxId} 
                     style={{ 
                         marginLeft: "1rem", 
-                        fontSize: "1.5rem", 
+                        fontSize: isModalOpen ? "2rem" : "1.5rem", 
                         color: note.isFavorite ? "gold" : "",
                         cursor: "pointer"
                     }} 
@@ -55,19 +58,21 @@ function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNo
                         e.stopPropagation()
                         toggleFavorites(note.id)
                     }} 
+                    title="Favorite"
                 /> 
                 {/* Pin button */}
                 <IonIcon 
                     icon={note.pinned ? bookmark : bookmarkOutline}
                     style={{ 
                         marginLeft: "1rem", 
-                        fontSize: "1.5rem",
+                        fontSize: isModalOpen ? "2rem" : "1.5rem",
                         cursor: "pointer"
                     }}
                     onClick={(e) => {
                         e.stopPropagation()
                         togglePin(note.id)
                     }}
+                    title="Pin"
                 />
             </h5> 
         )
@@ -89,10 +94,11 @@ function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNo
 
             {/* 2. THE POPUP MODAL DETAILED VIEW */}
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} >
-                <NoteTitle />
                 
                 {editingNoteId === note.id ? ( 
                     <NoteEditForm 
+                        editTitle={editTitle}
+                        setEditTitle={setEditTitle}
                         editText={editText} 
                         setEditText={setEditText} 
                         handleSave={handleSave}
@@ -100,27 +106,31 @@ function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNo
                     /> 
                 ) : ( 
                     <> 
+                        <NoteTitle />
                         <p className="note-content" > 
                             {note.note} 
                         </p> 
                         <div className="icons"> 
                             <IonIcon 
                                 icon={createOutline} 
-                                style={{ fontSize: '1.8rem', cursor: 'pointer' }} 
+                                style={{ fontSize: '2.5rem', cursor: 'pointer' }} 
                                 onClick={(e) => { 
                                     e.stopPropagation()
                                     setEditingNoteId(note.id) 
+                                    setEditTitle(note.title)
                                     setEditText(note.note) 
                                 }} 
+                                title="Edit"
                             /> 
                             <IonIcon 
                                 icon={trashOutline} 
-                                style={{ fontSize: '1.8rem', cursor: 'pointer' }} 
+                                style={{ fontSize: '2.5rem', cursor: 'pointer' }} 
                                 onClick={(e) => {
                                     e.stopPropagation()
                                     deleteNote(note.id)
                                     setIsModalOpen(false)
                                 }} 
+                                title="Delete"
                             /> 
                         </div> 
                     </> 

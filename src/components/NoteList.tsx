@@ -7,7 +7,7 @@ type NoteListProps = {
     deleteNote: (id: number) => void
     togglePin: (id: number) => void
     toggleFavorites: (id: number) => void
-    handleUpdateNote: (id: number, updatedText: string) => void
+    handleUpdateNote: (id: number, updatedTitle: string, updatedText: string) => void
 }
 
 function NoteList({ 
