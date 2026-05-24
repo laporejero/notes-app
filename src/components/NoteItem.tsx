@@ -43,37 +43,46 @@ function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNo
     function NoteTitle() {
         return (
             <h5> 
-                {note.title} 
-                {/* Star button */}
-                <IonIcon 
-                    icon={note.isFavorite ? star : starOutline} 
-                    id={checkboxId} 
-                    style={{ 
-                        marginLeft: "1rem", 
-                        fontSize: isModalOpen ? "2rem" : "1.5rem", 
-                        color: note.isFavorite ? "gold" : "",
-                        cursor: "pointer"
-                    }} 
-                    onClick={(e) => { 
-                        e.stopPropagation()
-                        toggleFavorites(note.id)
-                    }} 
-                    title="Favorite"
-                /> 
-                {/* Pin button */}
-                <IonIcon 
-                    icon={note.pinned ? bookmark : bookmarkOutline}
-                    style={{ 
-                        marginLeft: "1rem", 
-                        fontSize: isModalOpen ? "2rem" : "1.5rem",
-                        cursor: "pointer"
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "space-between"
                     }}
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        togglePin(note.id)
-                    }}
-                    title="Pin"
-                />
+                >
+                    <div>
+                        {note.title} 
+                        {/* Star button */}
+                        <IonIcon 
+                            icon={note.isFavorite ? star : starOutline} 
+                            id={checkboxId} 
+                            style={{ 
+                                marginLeft: "1rem", 
+                                fontSize: isModalOpen ? "2rem" : "1.5rem", 
+                                color: note.isFavorite ? "gold" : "",
+                                cursor: "pointer"
+                            }} 
+                            onClick={(e) => { 
+                                e.stopPropagation()
+                                toggleFavorites(note.id)
+                            }} 
+                            title="Favorite"
+                        /> 
+                        {/* Pin button */}
+                        <IonIcon 
+                            icon={note.pinned ? bookmark : bookmarkOutline}
+                            style={{ 
+                                marginLeft: "1rem", 
+                                fontSize: isModalOpen ? "2rem" : "1.5rem",
+                                cursor: "pointer"
+                            }}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                togglePin(note.id)
+                            }}
+                            title="Pin"
+                        />
+                    </div>
+                </div>
             </h5> 
         )
     }
@@ -86,7 +95,28 @@ function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNo
                 onClick={() => setIsModalOpen(true)}
                 style={{ cursor: 'pointer' }}
             > 
-                <NoteTitle />
+                <div style={{
+                    display: "flex",
+                    justifyContent: "space-between"
+                }}>
+                    <div>
+                        <NoteTitle />
+                    </div>
+                    <div className="child">
+                        {/* Delete Button */}
+                        <IonIcon 
+                            icon={trashOutline}
+                            style={{ 
+                                fontSize: isModalOpen ? "2rem" : "1.5rem", 
+                                cursor: 'pointer' }}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                deleteNote(note.id)
+                            }}
+                            title="Delete"
+                        />
+                    </div>
+                </div>
                 <p className="note-preview-text"> 
                     {note.note} 
                 </p>

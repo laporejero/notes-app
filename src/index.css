@@ -201,6 +201,16 @@ button:hover {
         0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
+.child {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.note:hover .child {
+  opacity: 1;
+}
+
+
 .note > .editInput {
     font-size: var(--text-base);
     width: 100%;

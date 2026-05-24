@@ -9,6 +9,7 @@ import NoteList from "./components/NoteList"
 import NoteForm from "./components/NoteForm"
 import NoteFilter from "./components/NoteFilter"
 import NoteSort from "./components/NoteSort"
+import UndoButton from "./components/UndoButton/UndoButton"
 
 function App() {
   // States
@@ -24,6 +25,8 @@ function App() {
   const [filter, setFilter] = useState<Filter>("All")
   const [sort, setSort] = useState<Sort>("Newest")
   const [search, setSearch] = useState<string>("")
+  const [history, setHistory] = useState<Note[][]>([])
+  const [showUndo, setShowUndo] = useState<boolean>(false)
 
   // Update localStorage everytime state variable notes change
   useEffect(() => {
@@ -49,10 +52,41 @@ function App() {
   }
 
   function deleteNote(id:number):void {
+    // save current notes
+    setHistory(prevHistory => [...prevHistory, notes])
+
+    // delete note
     setNotes(prevNotes => 
       prevNotes.filter(note => note.id !== id)
     )
+
+    // show undo button
+    setShowUndo(true)
   }
+
+  function undo() {
+    if (history.length === 0) return 0
+
+    const previous = history[history.length - 1]
+
+    setNotes(previous)
+
+    setHistory(prevHistory => 
+      prevHistory.slice(0, prevHistory.length - 1)
+    )
+
+    setShowUndo(false)
+  }
+
+  useEffect(() => {
+    if (!showUndo) return
+
+    const timer = setTimeout(() => {
+      setShowUndo(false)
+    }, 5000)
+
+    return () => clearTimeout(timer)
+  }, [showUndo])
 
   // Toggle Favorite note function
   function toggleFavorites(id:number):void {
@@ -139,6 +173,7 @@ function App() {
         <NoteForm addNote={addNote} />
         <NoteFilter filter={filter} setFilter={setFilter} />
         <NoteSort sort={sort} setSort={setSort} />
+        <UndoButton undo={undo} show={showUndo} />
         {content}
       </main>
     </>
