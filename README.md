@@ -1,5 +1,5 @@
 # Notes App
-# Live Demo: https://laporejero.github.io/notes-app/
+## Live Demo: https://laporejero.github.io/notes-app/
 
 A Notes App built with React and TypeScript featuring full CRUD capabilities, pin priority, favorite toggles, and localStorage persistence.
 
@@ -9,6 +9,7 @@ A Notes App built with React and TypeScript featuring full CRUD capabilities, pi
 - Pin notes to lock them permanently to the top of your feed
 - Toggle favorite stars on important notes
 - Filter notes easily (All / Favorites)
+- Undo note deletion
 - Live search query filtering through titles and bodies simultaneously
 - Custom masonry layout for a fluid note feed
 - LocalStorage state persistence
