@@ -1,0 +1,379 @@
+:root {
+    /* FONT SIZE */
+    --text-sm: 1.4rem;
+    --text-base: 1.6rem;
+    --text-paragraph: 2rem;
+    --text-h5: 2.4rem;
+    --text-h4: 3.2rem;
+    --text-h3: 4rem;
+    --text-h2: 4.8rem;
+    --text-h1: 6.2rem;
+
+    /* FONT WEIGHTS */
+    --font-weight-normal: 400;
+    --font-weight-bold: 700;
+
+    /* LINE HEIGHT */
+    --line-height-tight: 1.2;
+    --line-height-normal: 1.5;
+
+    /* LETTER SPACING */
+    --letter-spacing-tight: -0.5px;
+
+    /* FONT FAMILY */
+    --font-family: "Google Sans", sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%; /* 10px */
+    font-family: var(--font-family);
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #191919;
+    color: rgb(232, 232, 232);
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    font-family: var(--font-family);
+    letter-spacing: var(--letter-spacing-tight);
+}
+
+h1 {
+    font-size: var(--text-h1);
+}
+h2 {
+    font-size: var(--text-h2);
+
+    margin: 2rem 0;
+}
+h3 {
+    font-size: var(--text-h3);
+}
+h4 {
+    font-size: var(--text-h4);
+}
+h5 {
+    font-size: var(--text-h5);
+}
+
+p, ul, label {
+    font-size: var(--text-base);
+}
+
+ul {
+    list-style: none;
+}
+
+main {
+    max-width: 180rem;
+    margin: 0 auto;
+}
+
+/* NAVBAR */
+.navbar {
+    padding: 1rem 2rem;
+    border-bottom: 1px solid rgb(50, 50, 50);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+
+    display: flex;
+    align-items: center;
+    gap: 5rem;
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: #191919;
+}
+
+.navbar input {
+    font-size: var(--text-base);
+    background-color: #191919;
+    width: 100%;
+    max-width: 50rem;
+    color: rgb(232, 232, 232);
+    border: 1px solid rgb(165, 165, 165);
+    border-radius: 1rem;
+    padding: 1rem;
+    font-weight: 500;
+}
+
+hr {
+    color: rgb(165, 165, 165);
+}
+
+/* NOTE FORM */
+.note-form {
+    width: 100%;
+    max-width: 60rem;
+    margin: 2rem auto 0;
+    padding: 1.5rem;
+    border: 1px solid rgb(165, 165, 165);
+    border-radius: 5px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;   
+}
+
+.note-form input {
+    font-size: var(--text-base);
+    width: 100%;
+    background-color: #191919;
+    color: rgb(232, 232, 232);
+    border: none;
+    padding: 0.5rem;
+    font-weight: 500;
+}
+
+.note-form input:focus {
+    outline: none;
+}
+
+.note-form button {
+    width: 10rem;
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+
+    color: rgb(232, 232, 232);
+    background-color: transparent;
+
+    border: 1px solid rgb(165, 165, 165);
+    border-radius: 5px;
+
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    background-color: rgb(232, 232, 232);
+    color: #191919;
+    border-color: rgb(232, 232, 232);
+}
+
+/* NOTE LIST & ITEM */
+.note-list-container {
+    padding: 2rem;
+    column-count: auto;
+    column-width: 25rem;
+    column-gap: 1.5rem;
+}
+
+.note {
+    border: 1px solid rgb(165, 165, 165);
+    border-radius: 5px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    break-inside: avoid;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+
+    transition: 
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+
+    animation: fadeSlideUp 0.25s ease;
+}
+
+.note:hover {
+    transform: translateY(-3px);
+    border-color: rgb(232, 232, 232);
+
+    box-shadow: 
+        0 8px 2.4rem rgba(0, 0, 0, 0.35),
+        0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.child {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.note:hover .child {
+  opacity: 1;
+}
+
+
+.note > .editInput {
+    font-size: var(--text-base);
+    width: 100%;
+    background-color: #191919;
+    color: rgb(232, 232, 232);
+    border: 1px solid rgb(165, 165, 165);
+    padding: 0.5rem;
+    font-weight: 500;
+}
+
+.note > .icons {
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.no-notes-message {
+    padding: 2rem;
+}
+
+/* EDIT FORM */
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 70rem;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.edit-form .edit-title-input,
+.edit-form .edit-note-input {
+    width: 100%;
+    font-family: var(--font-family);
+    background-color: #191919;
+    color: rgb(232, 232, 232);
+    border: 1px solid rgb(165, 165, 165);
+    padding: 0.5rem;
+    font-size: var(--text-base);
+    font-weight: 500;
+    box-sizing: border-box;
+}
+
+.edit-form .edit-title-input {
+    height: 3rem;
+    min-height: 3rem;
+    resize: none;
+}
+
+.edit-form .edit-note-input {
+    min-height: 30rem; 
+    resize: vertical;
+}
+
+.edit-form-btn {
+    padding: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+}
+
+/* CONTROLS */
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 1.5rem 0;
+}
+
+.control-group label {
+    font-size: var(--text-base);
+    font-weight: 500;
+    color: rgb(165, 165, 165);
+}
+
+.control-group select {
+    font-family: var(--font-family);
+    font-size: var(--text-base);
+    background-color: #191919;
+    color: rgb(232, 232, 232);
+    border: 1px solid rgb(165, 165, 165);
+    border-radius: 5px;
+    padding: 0.4rem 2.5rem 0.4rem 0.8rem;
+    cursor: pointer;
+    font-weight: var(--font-weight-normal);
+    outline: none;
+
+    appearance: none;
+    --webkit-appearance: none;
+    --moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgb(165, 165, 165)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right 0.6rem center;
+    background-size: 1.4rem;
+}
+
+.control-group select:focus,
+.control-group select:hover {
+    border-color: rgb(232, 232, 232);
+}
+
+.control-group select option {
+    background-color: #191919;
+    color: rgb(232, 232, 232);
+}
+
+/* ---------- ANIMATIONS ---------- */
+/* INPUT FOCUS GLOW */
+.navbar input,
+.note-form input,
+.note > .editInput,
+.edit-form textarea,
+.control-group select {
+    transition: 
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.navbar input:focus,
+.note-form input:focus,
+.note > .editInput:focus,
+.edit-form textarea:focus,
+.control-group select:focus,
+.edit-form .edit-title-input:focus,
+.edit-form .edit-note-input:focus {
+    border-color: rgb(232, 232, 232);
+    box-shadow: 0 0 0 3px rgba(232, 232, 232, 0.08);
+    transform: scale(1.01);
+}
+
+button {
+    transition: 
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.1s ease;
+}
+
+button:active {
+    transform: scale(0.96);
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.note ion-icon, .edit-form ion-icon:hover {
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.note ion-icon:hover, .edit-form ion-icon:hover {
+    transform: scale(1.15);
+}

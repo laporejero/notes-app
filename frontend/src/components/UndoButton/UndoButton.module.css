@@ -1,0 +1,44 @@
+.undoBtnContainer {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+
+    z-index: 999;
+
+    opacity: 0;
+    pointer-events: none;
+
+    /* transition: all 0.25s ease; */
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+}
+
+.undoBtn {
+    width: 15rem;
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+
+    color: rgb(232, 232, 232);
+    background-color: rgba(30, 30, 30, 0.9);
+    backdrop-filter: blur(8px);
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.undoBtn:hover {
+    background-color: rgb(232, 232, 232);
+    color: #191919;
+    border-color: rgb(232, 232, 232);
+}

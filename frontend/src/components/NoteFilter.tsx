@@ -1,0 +1,28 @@
+import type { JSX } from "react"
+import type { Filter } from "../types"
+
+type NoteFilterProps = {
+    filter: Filter
+    setFilter: (filter: Filter) => void
+}
+
+function NoteFilter({ filter, setFilter }: NoteFilterProps): JSX.Element {
+    return (
+        <form className="control-group">
+            <label htmlFor="filter-select">
+                <span>Show notes: </span>
+                <select 
+                    id="filter-select"
+                    value={filter} 
+                    onChange={e => setFilter(e.target.value as Filter)}
+                >
+                    <option value="All">All</option>
+                    <option value="Favorites">Favorites</option>
+                    <option value="Pinned">Pinned</option>
+                </select>
+            </label>
+        </form>
+    )
+}
+
+export default NoteFilter
