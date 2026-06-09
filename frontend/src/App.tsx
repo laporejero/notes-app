@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import axios from "axios"
 
 // Types
 import type { Note, Filter, Sort } from "./types"
@@ -13,25 +14,20 @@ import UndoButton from "./components/UndoButton/UndoButton"
 
 function App() {
   // States
-  const [notes, setNotes] = useState<Note[]>(() => {
-    try {
-      const saved = localStorage.getItem("notes")
-      return saved ? JSON.parse(saved) : []
-    } catch (error) {
-      console.error("Failed to parse notes:", error)
-      return []
-    }
-  })
+  const [notes, setNotes] = useState<Note[]>([])
   const [filter, setFilter] = useState<Filter>("All")
   const [sort, setSort] = useState<Sort>("Newest")
   const [search, setSearch] = useState<string>("")
-  const [history, setHistory] = useState<Note[][]>([])
+  const [history, setHistory] = useState<Note[]>([])
   const [showUndo, setShowUndo] = useState<boolean>(false)
 
-  // Update localStorage everytime state variable notes change
   useEffect(() => {
-    localStorage.setItem("notes", JSON.stringify(notes))
-  }, [notes])
+    axios
+      .get('http://localhost:3001/notes')
+      .then(response => {
+        setNotes(response.data)
+      })
+  }, [])
 
   // Add Note function
   function addNote(title:string, body:string):void {
@@ -40,7 +36,7 @@ function App() {
       return
     }
 
-    const newItem: Note = {
+    const newNote:Note = {
       id: Date.now(),
       title: title,
       note: body,
@@ -48,34 +44,57 @@ function App() {
       pinned: false
     }
 
-    setNotes(prevNotes => [...prevNotes, newItem])
+    axios
+      .post('http://localhost:3001/notes', newNote)
+      .then(response => {
+        setNotes(notes.concat(response.data))
+      })
   }
 
   function deleteNote(id:number):void {
-    // save current notes
-    setHistory(prevHistory => [...prevHistory, notes])
+    const noteToDelete = notes.find(note => note.id === id)
 
-    // delete note
-    setNotes(prevNotes => 
-      prevNotes.filter(note => note.id !== id)
-    )
+    if (!noteToDelete) return
 
-    // show undo button
-    setShowUndo(true)
+    axios
+      .delete(`http://localhost:3001/notes/${id}`)
+      .then(() => {
+        // save current notes
+        setHistory(prevHistory => [...prevHistory, noteToDelete])
+
+        // delete note
+        setNotes(prevNotes => 
+          prevNotes.filter(note => note.id !== id)
+        )
+
+        // show undo button
+        setShowUndo(true)
+      })
   }
 
-  function undo() {
-    if (history.length === 0) return 0
+  function undoDelete():void {
+    const lastDeleted:Note = history[history.length - 1]
 
-    const previous = history[history.length - 1]
+    if (!lastDeleted) return
 
-    setNotes(previous)
+    axios
+      .post('http://localhost:3001/notes', lastDeleted)
+      .then(response => {
+        setNotes(prevNotes => [...prevNotes, response.data])
 
-    setHistory(prevHistory => 
-      prevHistory.slice(0, prevHistory.length - 1)
-    )
+        setHistory(prevHistory => {
+          const newHistory:Note[] = prevHistory.slice(0, -1)
 
-    setShowUndo(false)
+          if (newHistory.length === 0) {
+            setShowUndo(false)
+          }
+
+          return newHistory
+        })
+      })
+      .catch(err => {
+        console.error('Undo failed:', err)
+      })
   }
 
   useEffect(() => {
@@ -90,30 +109,60 @@ function App() {
 
   // Toggle Favorite note function
   function toggleFavorites(id:number):void {
-    setNotes(prevNotes =>
-      prevNotes.map(note => 
-        note.id === id ? { ...note, isFavorite: !note.isFavorite } : note
-      )
-    )
+    const note:Note|undefined = notes.find(n => n.id === id)
+
+    if (!note) return
+
+    const changedNote:Note = { ...note, isFavorite: !note.isFavorite }
+
+    axios
+      .put(`http://localhost:3001/notes/${id}`, changedNote)
+      .then(() => {
+        setNotes(prevNotes =>
+          prevNotes.map(note => 
+            note.id === id ? { ...note, isFavorite: !note.isFavorite } : note
+          ))  
+      })
   }
 
   // Toggle Pin note function
   function togglePin(id:number):void {
-    setNotes(prevNotes =>
-      prevNotes.map(note =>
-        note.id === id ? { ...note, pinned: !note.pinned } : note
-      )
-    )
+    const note:Note|undefined = notes.find(n => n.id === id)
+
+    if (!note) return
+
+    const changedNote:Note = { ...note, pinned: !note.pinned }
+
+    axios
+      .put(`http://localhost:3001/notes/${id}`, changedNote)
+      .then(() => {
+        setNotes(prevNotes =>
+          prevNotes.map(note =>
+            note.id === id ? { ...note, pinned: !note.pinned } : note
+          ))
+      })
   }
 
   // Update note function
   function handleUpdateNote(id:number, updatedTitle:string, updatedText:string):void {
-    setNotes(prevNotes =>
-    prevNotes.map(note =>
-        note.id === id
-        ? { ...note, title: updatedTitle, note: updatedText } : note
-      )
-    )
+    const note:Note|undefined = notes.find(note => note.id === id)
+
+    if (!note) return
+    
+    const updatedNote:Note = {
+      ...note,
+      title: updatedTitle,
+      note: updatedText
+    }
+
+    axios
+      .put(`http://localhost:3001/notes/${id}`, updatedNote)
+      .then(() => {
+        setNotes(prevNotes =>
+          prevNotes.map(note =>
+              note.id === id ? updatedNote : note
+            ))
+      })
   }
 
   // Filter & Sort Notes list
@@ -173,7 +222,7 @@ function App() {
         <NoteForm addNote={addNote} />
         <NoteFilter filter={filter} setFilter={setFilter} />
         <NoteSort sort={sort} setSort={setSort} />
-        <UndoButton undo={undo} show={showUndo} />
+        <UndoButton undo={undoDelete} show={showUndo} />
         {content}
       </main>
     </>
