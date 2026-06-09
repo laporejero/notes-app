@@ -31,10 +31,7 @@ function App() {
 
   // Add Note function
   function addNote(title:string, body:string):void {
-    if (!title.trim() || !body.trim()) {
-      alert("Invalid input")
-      return
-    }
+    if (!title.trim() || !body.trim()) return
 
     const newNote:Note = {
       id: Date.now(),

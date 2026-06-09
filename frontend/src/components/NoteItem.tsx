@@ -28,6 +28,8 @@ function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNo
     const checkboxId = `checkbox-${note.id}`
 
     function handleSave():void {
+        if (!editTitle.trim() || !editText.trim()) return
+
         handleUpdateNote(note.id, editTitle, editText)
         setEditingNoteId(undefined)
         setEditTitle("")

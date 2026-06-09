@@ -69,15 +69,11 @@ app.get('/api/notes/:id', (request, response) => {
 app.post('/api/notes', (request, response) => {
     const body = request.body
 
-    if (!body.title) {
-        return response.status(400).json({
-            error: 'title missing'
-        })
+    if (!body.title?.trim()) {
+        return response.status(400).json({ error: 'title missing'})
     }
-    if (!body.note) {
-        return response.status(400).json({
-            error: 'note missing'
-        })
+    if (!body.note?.trim()) {
+        return response.status(400).json({ error: 'note missing' })
     }
 
     const note = {
@@ -91,6 +87,37 @@ app.post('/api/notes', (request, response) => {
     notes = notes.concat(note)
 
     response.json(note)
+})
+
+// Update a note
+app.put('/api/notes/:id', (request, response) => {
+    const id = request.params.id
+    const body = request.body
+
+    if (!body.title?.trim()) {
+        return response.status(400).json({ error: 'title missing'})
+    }
+    if (!body.note?.trim()) {
+        return response.status(400).json({ error: 'note missing' })
+    }
+
+    const note = notes.find(note => note.id === id)
+
+    if (!note) {
+        return response.status(404).json({ error: 'note not found' })
+    }
+
+    const updatedNote = {
+        ...note,
+        title: body.title,
+        note: body.note,
+    }
+
+    notes = notes.map(note =>
+        note.id === id ? updatedNote : note
+    )
+
+    response.json(updatedNote)
 })
 
 // Deleting a note
