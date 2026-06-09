@@ -1,9 +1,10 @@
 export type Note = {
-    id: number
+    id: string
     title: string
     note: string
     isFavorite: boolean
     pinned: boolean
+    createdAt: string
 }
 
 export type Filter = "All" | "Favorites" | "Pinned"

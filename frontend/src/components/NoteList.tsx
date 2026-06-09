@@ -4,10 +4,10 @@ import NoteItem from "./NoteItem"
 
 type NoteListProps = {
     notes: Note[]
-    deleteNote: (id: number) => void
-    togglePin: (id: number) => void
-    toggleFavorites: (id: number) => void
-    handleUpdateNote: (id: number, updatedTitle: string, updatedText: string) => void
+    deleteNote: (id:string) => void
+    togglePin: (id:string) => void
+    toggleFavorites: (id:string) => void
+    handleUpdateNote: (id:string, updatedTitle: string, updatedText: string) => void
 }
 
 function NoteList({ 

@@ -5,35 +5,40 @@
       "title": "Grocery List",
       "note": "Buy almond milk, avocados, whole wheat bread, and coffee beans.",
       "isFavorite": false,
-      "pinned": true
+      "pinned": false,
+      "createdAt": "2026-06-09T08:00:00.000Z"
     },
     {
       "id": "2",
       "title": "Project Ideas",
       "note": "Brainstorming a mobile app for tracking local community volunteer events.",
       "isFavorite": false,
-      "pinned": false
+      "pinned": true,
+      "createdAt": "2026-06-09T08:30:00.000Z"
     },
     {
       "id": "3",
       "title": "Meeting Minutes",
       "note": "Discussed Q3 marketing budget. Sarah to follow up with the design team by Friday.",
-      "isFavorite": true,
-      "pinned": true
+      "isFavorite": false,
+      "pinned": true,
+      "createdAt": "2026-06-09T09:00:00.000Z"
     },
     {
       "id": "4",
       "title": "Book Recommendations",
       "note": "Read 'Atomic Habits', 'Bible' and 'Deep Work' before the end of the quarter.",
-      "isFavorite": false,
-      "pinned": false
+      "isFavorite": true,
+      "pinned": false,
+      "createdAt": "2026-06-09T09:30:00.000Z"
     },
     {
       "id": "5",
       "title": "Workout Routine",
       "note": "Monday: Legs, Wednesday: Push, Friday: Pull. Cardio on weekends.",
       "isFavorite": true,
-      "pinned": false
+      "pinned": false,
+      "createdAt": "2026-06-09T10:00:00.000Z"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
-import axios from "axios"
+
+// Services
+import noteService from "./services/notes"
 
 // Types
 import type { Note, Filter, Sort } from "./types"
@@ -22,8 +24,8 @@ function App() {
   const [showUndo, setShowUndo] = useState<boolean>(false)
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/notes')
+    noteService
+      .getAll()
       .then(response => {
         setNotes(response.data)
       })
@@ -34,27 +36,28 @@ function App() {
     if (!title.trim() || !body.trim()) return
 
     const newNote:Note = {
-      id: Date.now(),
+      id: String(Date.now()),
       title: title,
       note: body,
       isFavorite: false,
-      pinned: false
+      pinned: false,
+      createdAt: new Date().toISOString()
     }
 
-    axios
-      .post('http://localhost:3001/notes', newNote)
+    noteService
+      .create(newNote)
       .then(response => {
         setNotes(notes.concat(response.data))
       })
   }
 
-  function deleteNote(id:number):void {
+  function deleteNote(id:string):void {
     const noteToDelete = notes.find(note => note.id === id)
 
     if (!noteToDelete) return
 
-    axios
-      .delete(`http://localhost:3001/notes/${id}`)
+    noteService
+      .deleteNote(id)
       .then(() => {
         // save current notes
         setHistory(prevHistory => [...prevHistory, noteToDelete])
@@ -74,8 +77,8 @@ function App() {
 
     if (!lastDeleted) return
 
-    axios
-      .post('http://localhost:3001/notes', lastDeleted)
+    noteService
+      .create(lastDeleted)
       .then(response => {
         setNotes(prevNotes => [...prevNotes, response.data])
 
@@ -105,15 +108,15 @@ function App() {
   }, [showUndo])
 
   // Toggle Favorite note function
-  function toggleFavorites(id:number):void {
+  function toggleFavorites(id:string):void {
     const note:Note|undefined = notes.find(n => n.id === id)
 
     if (!note) return
 
     const changedNote:Note = { ...note, isFavorite: !note.isFavorite }
 
-    axios
-      .put(`http://localhost:3001/notes/${id}`, changedNote)
+    noteService
+      .update(id, changedNote)
       .then(() => {
         setNotes(prevNotes =>
           prevNotes.map(note => 
@@ -123,15 +126,15 @@ function App() {
   }
 
   // Toggle Pin note function
-  function togglePin(id:number):void {
+  function togglePin(id:string):void {
     const note:Note|undefined = notes.find(n => n.id === id)
 
     if (!note) return
 
     const changedNote:Note = { ...note, pinned: !note.pinned }
 
-    axios
-      .put(`http://localhost:3001/notes/${id}`, changedNote)
+    noteService
+      .update(id, changedNote)
       .then(() => {
         setNotes(prevNotes =>
           prevNotes.map(note =>
@@ -141,7 +144,7 @@ function App() {
   }
 
   // Update note function
-  function handleUpdateNote(id:number, updatedTitle:string, updatedText:string):void {
+  function handleUpdateNote(id:string, updatedTitle:string, updatedText:string):void {
     const note:Note|undefined = notes.find(note => note.id === id)
 
     if (!note) return
@@ -152,8 +155,8 @@ function App() {
       note: updatedText
     }
 
-    axios
-      .put(`http://localhost:3001/notes/${id}`, updatedNote)
+    noteService
+      .update(id, updatedNote)
       .then(() => {
         setNotes(prevNotes =>
           prevNotes.map(note =>
@@ -186,11 +189,11 @@ function App() {
       }
 
       if (sort === "Newest") {
-        return b.id - a.id
+        return Date.parse(b.createdAt) - Date.parse(a.createdAt)
       }
 
       if (sort === "Oldest") {
-        return a.id - b.id
+        return Date.parse(a.createdAt) - Date.parse(b.createdAt)
       }
 
       return 0
