@@ -10,21 +10,28 @@ morgan.token('body', (req) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 // Fetch all data
-app.get('/api/notes', (request, response) => {
+app.get('/api/notes', (request, response, next) => {
     Note.find({}).then(notes => {
         response.json(notes)
     })
+    .catch(error => next(error))
 })
 
 // Fetch a single note
-app.get('/api/notes/:id', (request, response) => {
-    Note.findById(request.params.id).then(note => {
-        response.json(note)
+app.get('/api/notes/:id', (request, response, next) => {
+    Note.findById(request.params.id)
+        .then(note => {
+            if (note) {
+                response.json(note)
+            } else {
+                response.status(404).end()
+            }
     })
+    .catch(error => next(error))
 })
 
 // Adding a new note
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', (request, response, next) => {
     const body = request.body
 
     if (!body.title?.trim()) {
@@ -42,14 +49,15 @@ app.post('/api/notes', (request, response) => {
         createdAt: new Date().toISOString()
     })
 
-    note.save().then(savedNote => {
-        response.json(savedNote)
-    })
+    note.save()
+        .then(savedNote => {
+            response.json(savedNote)
+        })
+        .catch(error => next(error))
 })
 
 // Update a note
-app.put('/api/notes/:id', (request, response) => {
-    const id = request.params.id
+app.put('/api/notes/:id', (request, response, next) => {
     const body = request.body
 
     if (!body.title?.trim()) {
@@ -59,22 +67,26 @@ app.put('/api/notes/:id', (request, response) => {
         return response.status(400).json({ error: 'note missing' })
     }
 
-    const updatedNote = {
-        title: body.title,
-        note: body.note,
-        isFavorite: body.isFavorite,
-        pinned: body.pinned,
-        createdAt: body.createdAt
-    }
+    Note.findById(request.params.id)
+        .then(note => {
+            if (!note) {
+                return response.status(404).end()
+            }
 
-    Note.findByIdAndUpdate(id, updatedNote, { new: true })
-        .then(updated => {
-            response.json(updated)
+            note.title = body.title
+            note.note = body.note
+            note.isFavorite = body.isFavorite
+            note.pinned = body.pinned
+
+            return note.save().then((updatedNote) => {
+                response.json(updatedNote)
+            })
         })
+        .catch(error => next(error))
 })
 
 // Deleting a note
-app.delete('/api/notes/:id', (request, response) => {
+app.delete('/api/notes/:id', (request, response, next) => {
     Note.findByIdAndDelete(request.params.id)
         .then(result => {
             if (result) {
@@ -83,6 +95,7 @@ app.delete('/api/notes/:id', (request, response) => {
                 response.status(404).json({ error: 'note not found' })
             }
         })
+        .catch(error => next(error))
 })
 
 // Catch all for undefined routes
@@ -91,6 +104,19 @@ const unknownEndpoint = (request, response) => {
 }
 
 app.use(unknownEndpoint)
+
+// Error handling middleware
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+
+    if (error.name === 'CastError') {
+        return response.status(400).send({ error: 'malformatted id' })
+    }
+
+    return response.status(500).send({ error: 'internal server error' })
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
