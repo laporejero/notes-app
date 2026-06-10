@@ -2,10 +2,12 @@ require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const Note = require('./models/note')
+const path = require('path')
 
 const app = express()
 
 app.use(express.json())
+app.use(express.static(path.join(__dirname, 'dist')))
 morgan.token('body', (req) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
@@ -96,6 +98,10 @@ app.delete('/api/notes/:id', (request, response, next) => {
       }
     })
     .catch(error => next(error))
+})
+
+app.get(/^(?!\/api).*/, (request, response) => {
+  response.sendFile(path.resolve(__dirname, 'dist', 'index.html'))
 })
 
 // Catch all for undefined routes
