@@ -9,39 +9,44 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 
 let notes = [
     {
-    id: "1",
-    title: "Grocery List",
-    note: "Buy almond milk, avocados, whole wheat bread, and coffee beans.",
-    isFavorite: true,
-    pinned: true
+      "id": "1",
+      "title": "Grocery List",
+      "note": "Buy almond milk, avocados, whole wheat bread, and coffee beans.",
+      "isFavorite": false,
+      "pinned": false,
+      "createdAt": "2026-06-09T08:00:00.000Z"
     },
     {
-    id: "2",
-    title: "Project Ideas",
-    note: "Brainstorming a mobile app for tracking local community volunteer events.",
-    isFavorite: true,
-    pinned: false
+      "id": "2",
+      "title": "Project Ideas",
+      "note": "Brainstorming a mobile app for tracking local community volunteer events.",
+      "isFavorite": false,
+      "pinned": true,
+      "createdAt": "2026-06-09T08:30:00.000Z"
     },
     {
-    id: "3",
-    title: "Meeting Minutes",
-    note: "Discussed Q3 marketing budget. Sarah to follow up with the design team by Friday.",
-    isFavorite: false,
-    pinned: true
+      "id": "3",
+      "title": "Meeting Minutes",
+      "note": "Discussed Q3 marketing budget. Sarah to follow up with the design team by Friday.",
+      "isFavorite": false,
+      "pinned": true,
+      "createdAt": "2026-06-09T09:00:00.000Z"
     },
     {
-    id: "4",
-    title: "Book Recommendations",
-    note: "Read 'Atomic Habits' and 'Deep Work' before the end of the quarter.",
-    isFavorite: false,
-    pinned: false
+      "id": "4",
+      "title": "Book Recommendations",
+      "note": "Read 'Atomic Habits', 'Bible' and 'Deep Work' before the end of the quarter.",
+      "isFavorite": true,
+      "pinned": false,
+      "createdAt": "2026-06-09T09:30:00.000Z"
     },
     {
-    id: "5",
-    title: "Workout Routine",
-    note: "Monday: Legs, Wednesday: Push, Friday: Pull. Cardio on weekends.",
-    isFavorite: true,
-    pinned: false
+      "id": "5",
+      "title": "Workout Routine",
+      "note": "Monday: Legs, Wednesday: Push, Friday: Pull. Cardio on weekends.",
+      "isFavorite": true,
+      "pinned": false,
+      "createdAt": "2026-06-09T10:00:00.000Z"
     }
 ];
 
@@ -81,7 +86,8 @@ app.post('/api/notes', (request, response) => {
         title: body.title,
         note: body.note,
         isFavorite: false,
-        pinned: false
+        pinned: false,
+        createdAt: new Date().toISOString()
     }
 
     notes = notes.concat(note)
@@ -135,7 +141,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
 })
