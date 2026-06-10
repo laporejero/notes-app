@@ -1,73 +1,26 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
+const Note = require('./models/note')
+
 const app = express()
 
 app.use(express.json())
-
 morgan.token('body', (req) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
-let notes = [
-    {
-      "id": "1",
-      "title": "Grocery List",
-      "note": "Buy almond milk, avocados, whole wheat bread, and coffee beans.",
-      "isFavorite": false,
-      "pinned": false,
-      "createdAt": "2026-06-09T08:00:00.000Z"
-    },
-    {
-      "id": "2",
-      "title": "Project Ideas",
-      "note": "Brainstorming a mobile app for tracking local community volunteer events.",
-      "isFavorite": false,
-      "pinned": true,
-      "createdAt": "2026-06-09T08:30:00.000Z"
-    },
-    {
-      "id": "3",
-      "title": "Meeting Minutes",
-      "note": "Discussed Q3 marketing budget. Sarah to follow up with the design team by Friday.",
-      "isFavorite": false,
-      "pinned": true,
-      "createdAt": "2026-06-09T09:00:00.000Z"
-    },
-    {
-      "id": "4",
-      "title": "Book Recommendations",
-      "note": "Read 'Atomic Habits', 'Bible' and 'Deep Work' before the end of the quarter.",
-      "isFavorite": true,
-      "pinned": false,
-      "createdAt": "2026-06-09T09:30:00.000Z"
-    },
-    {
-      "id": "5",
-      "title": "Workout Routine",
-      "note": "Monday: Legs, Wednesday: Push, Friday: Pull. Cardio on weekends.",
-      "isFavorite": true,
-      "pinned": false,
-      "createdAt": "2026-06-09T10:00:00.000Z"
-    }
-];
-
-app.get('/', (request, response) => {
-    response.send('<h1>Hello from backend</h1>')
-})
-
 // Fetch all data
 app.get('/api/notes', (request, response) => {
-    response.json(notes)
+    Note.find({}).then(notes => {
+        response.json(notes)
+    })
 })
 
 // Fetch a single note
 app.get('/api/notes/:id', (request, response) => {
-    const id = request.params.id
-    const note = notes.find(note => note.id === id)
-    if (note) {
+    Note.findById(request.params.id).then(note => {
         response.json(note)
-    } else {
-        response.status(404).end()
-    }
+    })
 })
 
 // Adding a new note
@@ -81,18 +34,17 @@ app.post('/api/notes', (request, response) => {
         return response.status(400).json({ error: 'note missing' })
     }
 
-    const note = {
-        id: String(notes.length + 1),
+    const note = new Note({
         title: body.title,
         note: body.note,
         isFavorite: false,
         pinned: false,
         createdAt: new Date().toISOString()
-    }
+    })
 
-    notes = notes.concat(note)
-
-    response.json(note)
+    note.save().then(savedNote => {
+        response.json(savedNote)
+    })
 })
 
 // Update a note
@@ -107,31 +59,30 @@ app.put('/api/notes/:id', (request, response) => {
         return response.status(400).json({ error: 'note missing' })
     }
 
-    const note = notes.find(note => note.id === id)
-
-    if (!note) {
-        return response.status(404).json({ error: 'note not found' })
-    }
-
     const updatedNote = {
-        ...note,
         title: body.title,
         note: body.note,
+        isFavorite: body.isFavorite,
+        pinned: body.pinned,
+        createdAt: body.createdAt
     }
 
-    notes = notes.map(note =>
-        note.id === id ? updatedNote : note
-    )
-
-    response.json(updatedNote)
+    Note.findByIdAndUpdate(id, updatedNote, { new: true })
+        .then(updated => {
+            response.json(updated)
+        })
 })
 
 // Deleting a note
 app.delete('/api/notes/:id', (request, response) => {
-    const id = request.params.id
-    notes = notes.filter(note => note.id !== id)
-
-    response.status(204).end()
+    Note.findByIdAndDelete(request.params.id)
+        .then(result => {
+            if (result) {
+                response.status(204).end()
+            } else {
+                response.status(404).json({ error: 'note not found' })
+            }
+        })
 })
 
 // Catch all for undefined routes
