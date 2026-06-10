@@ -22,12 +22,19 @@ function App() {
   const [search, setSearch] = useState<string>("")
   const [history, setHistory] = useState<Note[]>([])
   const [showUndo, setShowUndo] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
     noteService
       .getAll()
       .then(response => {
         setNotes(response.data)
+      })
+      .catch(err => {
+        console.error('Failed to fetch notes:', err)
+      })
+      .finally(() => {
+        setLoading(false)
       })
   }, [])
 
@@ -49,8 +56,12 @@ function App() {
       .then(response => {
         setNotes(notes.concat(response.data))
       })
+      .catch(err => {
+        console.error('Failed to create note', err)
+      })
   }
 
+  // Delete note function
   function deleteNote(id:string):void {
     const noteToDelete = notes.find(note => note.id === id)
 
@@ -70,8 +81,12 @@ function App() {
         // show undo button
         setShowUndo(true)
       })
+      .catch(err => {
+        console.error('Failed to delete note:', err)
+      })
   }
 
+  // Undo note delete
   function undoDelete():void {
     const lastDeleted:Note = history[history.length - 1]
 
@@ -123,6 +138,9 @@ function App() {
             note.id === id ? { ...note, isFavorite: !note.isFavorite } : note
           ))  
       })
+      .catch(err => {
+        console.error('Failed to update favorite status:', err)
+      })
   }
 
   // Toggle Pin note function
@@ -140,6 +158,9 @@ function App() {
           prevNotes.map(note =>
             note.id === id ? { ...note, pinned: !note.pinned } : note
           ))
+      })
+      .catch(err => {
+        console.error('Failed to update pin status:', err)
       })
   }
 
@@ -162,6 +183,9 @@ function App() {
           prevNotes.map(note =>
               note.id === id ? updatedNote : note
             ))
+      })
+      .catch(err => {
+        console.error('Failed to update note:', err)
       })
   }
 
@@ -201,8 +225,11 @@ function App() {
 
   // Conditional rendering for Note list
   let content
-  if (filteredNotes.length === 0) {
-    content = <p className="no-notes-message">No notes available.</p>
+
+  if (loading) {
+    content = <p className="message-display">Loading notes...</p>
+  } else if (filteredNotes.length === 0) {
+    content = <p className="message-display">No notes available.</p>
   } else {
     content = (
       <NoteList 
