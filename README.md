@@ -1,8 +1,6 @@
 # Notes App
 
-## Live Demo
-
-https://notes-app-srlh.onrender.com/
+## Live Demo: https://notes-app-srlh.onrender.com/
 
 A full-stack Notes App built with React, TypeScript, Node.js, Express, and MongoDB Atlas. The application allows users to create, edit, organize, and manage notes through a responsive interface backed by a REST API and persistent database storage.
 
