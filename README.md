@@ -1,34 +1,56 @@
 # Notes App
-## Live Demo: https://notes-app-srlh.onrender.com/
 
-A Notes App built with React and TypeScript featuring full CRUD capabilities, pin priority, favorite toggles, and localStorage persistence.
+## Live Demo
 
-## Features:
-- Add new notes with a dynamic form
-- Edit and Delete individual notes
-- Pin notes to lock them permanently to the top of your feed
-- Toggle favorite stars on important notes
-- Filter notes easily (All / Favorites)
-- Undo note deletion
-- Live search query filtering through titles and bodies simultaneously
-- Custom masonry layout for a fluid note feed
-- LocalStorage state persistence
-- Fully responsive mobile and tablet design
+https://notes-app-srlh.onrender.com/
 
-## Tech stack:
-- React
-- TypeScript
-- CSS (Native Custom Variables)
-- Vite
+A full-stack Notes App built with React, TypeScript, Node.js, Express, and MongoDB Atlas. The application allows users to create, edit, organize, and manage notes through a responsive interface backed by a REST API and persistent database storage.
 
-## What I learned:
-This project improved my understanding of component structure by organizing code into smaller, manageable blocks, it becomes easier to update, modify, or fix one part of the app without disrupting others.
+## Features
 
-In this project, I learned how to sort and organize data using multiple rules at once. For example, I figured out how to make pinned notes always stay at the very top of the list, even when the user switches between showing the newest, oldest, or favorite notes.
+* Create, edit, and delete notes
+* Pin notes to keep important items at the top
+* Mark notes as favorites
+* Filter notes by category (All / Favorites)
+* Search notes by title and content
+* Undo recently deleted notes
+* Responsive layout for desktop, tablet, and mobile devices
+* Persistent data storage using MongoDB Atlas
+* RESTful API integration between frontend and backend
 
-Lastly, what I learned about is the state persistence. React's state resets on every page reload and getting a state from localStorage allows you to save that state so the data is still there when the user returns or reloads the app.
+## Tech Stack
 
-Overall, this project helped me better understand how to structure React applications, manage state properly, and think more carefully about frontend architecture and UI behavior.
+### Frontend
+
+* React
+* TypeScript
+* Vite
+* CSS
+
+### Backend
+
+* Node.js
+* Express.js
+* MongoDB Atlas
+* Mongoose
+
+### Tools
+
+* Git
+* GitHub
+* Render
+
+## What I Learned
+
+This project gave me practical experience building and deploying a full-stack web application from frontend to backend.
+
+On the frontend, I strengthened my understanding of React component architecture, state management, controlled forms, conditional rendering, and responsive UI design. I also learned how to structure applications into reusable components to improve maintainability and scalability.
+
+On the backend, I learned how to build REST APIs with Express, connect applications to MongoDB Atlas using Mongoose, and perform CRUD operations through API endpoints. This helped me better understand how frontend applications communicate with backend services and databases.
+
+One of the most valuable lessons from this project was designing data flow between the client and server. Instead of relying on browser storage, notes are stored in a database, allowing data to persist across sessions and devices.
+
+Overall, this project strengthened my understanding of full-stack development, API design, database integration, deployment workflows, and building applications that manage and persist real user data.
 
 <img width="1902" height="928" alt="web-view" src="https://github.com/user-attachments/assets/f3444933-ff73-43de-80a7-d1398be0202f" />
 <img width="1904" height="929" alt="web-modal-view" src="https://github.com/user-attachments/assets/bdfcf8e9-2513-4e76-95ed-eb0ca6624e18" />
