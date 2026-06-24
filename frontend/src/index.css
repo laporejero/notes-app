@@ -192,6 +192,23 @@ button:hover {
     animation: fadeSlideUp 0.25s ease;
 }
 
+.note-content {
+    white-space: pre-wrap;
+    overflow-y: auto;
+    max-height: 50vh;
+    line-height: var(--line-height-normal);
+}
+
+.note > .note-preview-text {
+    white-space: pre-wrap;
+
+    overflow: hidden;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 8;
+    -webkit-box-orient: vertical;
+}
+
 .note:hover {
     transform: translateY(-3px);
     border-color: rgb(232, 232, 232);
@@ -238,7 +255,6 @@ button:hover {
     flex-direction: column;
     gap: 0.75rem;
     width: 100%;
-    max-width: 70rem;
     padding: 1rem;
     box-sizing: border-box;
 }
@@ -264,6 +280,7 @@ button:hover {
 
 .edit-form .edit-note-input {
     min-height: 30rem; 
+    max-height: 80vh;
     resize: vertical;
 }
 

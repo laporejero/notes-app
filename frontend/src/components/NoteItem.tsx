@@ -139,9 +139,9 @@ function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNo
                 ) : ( 
                     <> 
                         <NoteTitle />
-                        <p className="note-content" > 
+                        <div className="note-content" > 
                             {note.note} 
-                        </p> 
+                        </div> 
                         <div className="icons"> 
                             <IonIcon 
                                 icon={createOutline} 
