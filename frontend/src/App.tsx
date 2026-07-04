@@ -2,11 +2,13 @@ import { useEffect, useState } from "react"
 
 // Services
 import noteService from "./services/notes"
+import loginService from "./services/login"
 
 // Types
 import type { Note, Filter, Sort } from "./types"
 
 // Components
+import LoginForm from "./components/LoginForm"
 import Navbar from "./components/Navbar"
 import NoteList from "./components/NoteList"
 import NoteForm from "./components/NoteForm"
@@ -23,6 +25,9 @@ function App() {
   const [history, setHistory] = useState<Note[]>([])
   const [showUndo, setShowUndo] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
+  const [username, setUsername] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+  const [user, setUser] = useState<string|null>(null)
 
   useEffect(() => {
     noteService
@@ -37,6 +42,32 @@ function App() {
         setLoading(false)
       })
   }, [])
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNotesAppUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      noteService.setToken(user.token)
+    }
+  }, [])
+
+  // login
+  async function handleLogin(event:any) {
+    event.preventDefault()
+    
+    try {
+      const user = await loginService.login(username, password)
+
+      window.localStorage.setItem('loggedNotesAppUser', JSON.stringify(user))
+      noteService.setToken(user.token)
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch (error) {
+      console.error('failed to sign in')
+    }
+  }
 
   // Add Note function
   function addNote(title:string, body:string):void {
@@ -244,14 +275,29 @@ function App() {
 
   return (
     <>
-      <Navbar search={search} setSearch={setSearch} />
-      <main>
-        <NoteForm addNote={addNote} />
-        <NoteFilter filter={filter} setFilter={setFilter} />
-        <NoteSort sort={sort} setSort={setSort} />
-        <UndoButton undo={undoDelete} show={showUndo} />
-        {content}
-      </main>
+      {user
+        ? (
+          <>
+          <Navbar search={search} setSearch={setSearch} />
+          <main>
+            <NoteForm addNote={addNote} />
+            <NoteFilter filter={filter} setFilter={setFilter} />
+            <NoteSort sort={sort} setSort={setSort} />
+            <UndoButton undo={undoDelete} show={showUndo} />
+            {content}
+          </main>
+          </>
+        )
+        : (
+          <LoginForm 
+            handleLogin={handleLogin}
+            username={username}
+            password={password}
+            setUsername={setUsername} 
+            setPassword={setPassword} 
+          />
+        )
+      }
     </>
   )
 }
