@@ -95,6 +95,21 @@ main {
     background-color: #191919;
 }
 
+.logout-btn {
+    margin-left: auto;
+    background: none;
+    border: none;
+    padding: 0;
+    color: rgb(232, 232, 232);
+    font-size: var(--text-base);
+    
+    cursor: pointer;
+}
+
+.navbar button:hover {
+    outline: none;
+}
+
 .navbar input {
     font-size: var(--text-base);
     background-color: #191919;

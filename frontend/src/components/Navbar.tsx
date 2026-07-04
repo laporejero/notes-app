@@ -3,9 +3,10 @@ import type { JSX } from "react"
 type NavbarProps = {
     search: string
     setSearch: (value: string) => void
+    handleLogout: (value: any) => void
 }
 
-function Navbar({ search, setSearch }: NavbarProps): JSX.Element {
+function Navbar({ search, setSearch, handleLogout }: NavbarProps): JSX.Element {
     return (
         <>
             <nav className="navbar">
@@ -16,6 +17,7 @@ function Navbar({ search, setSearch }: NavbarProps): JSX.Element {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
+                <button className="logout-btn" onClick={handleLogout}>LOGOUT</button>
             </nav>
         </>
     )

@@ -69,6 +69,12 @@ function App() {
     }
   }
 
+  function handleLogout(event:any) {
+    event.preventDefault()
+    window.localStorage.removeItem('loggedNotesAppUser')
+    setUser(null)
+  }
+
   // Add Note function
   function addNote(title:string, body:string):void {
     if (!title.trim() || !body.trim()) return
@@ -278,7 +284,7 @@ function App() {
       {user
         ? (
           <>
-          <Navbar search={search} setSearch={setSearch} />
+          <Navbar search={search} setSearch={setSearch} handleLogout={handleLogout} />
           <main>
             <NoteForm addNote={addNote} />
             <NoteFilter filter={filter} setFilter={setFilter} />
