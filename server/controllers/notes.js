@@ -3,10 +3,23 @@ const Note = require('../models/note')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.startsWith('Bearer ')) {
+    return authorization.replace('Bearer ', '')
+  }
+  return null
+}
+
 // Fetch all data
 notesRouter.get('/', async (request, response, next) => {
   try {
-    const notes = await Note.find({}).populate('user', { username: 1, name: 1 })
+    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'token invalid' })
+    }
+
+    const notes = await Note.find({ user: decodedToken.id }).populate('user', { username: 1, name: 1 })
     response.json(notes)
   } catch (error) {
     next(error)
@@ -16,10 +29,19 @@ notesRouter.get('/', async (request, response, next) => {
 // Fetch a single note
 notesRouter.get('/:id', async (request, response, next) => {
   try {
+    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'token invalid' })
+    }
+
     const note = await Note.findById(request.params.id)
 
     if (!note) {
-      response.status(404).end()
+      response.status(404).json({ error: 'note not found' })
+    }
+
+    if (note.user._id.toString() !== decodedToken.id) {
+      return response.status(403).json({ error: 'forbidden' })
     }
 
     response.json(note)
@@ -27,14 +49,6 @@ notesRouter.get('/:id', async (request, response, next) => {
     next(error)
   }
 })
-
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '')
-  }
-  return null
-}
 
 // Adding a new note
 notesRouter.post('/', async (request, response, next) => {
@@ -81,6 +95,11 @@ notesRouter.put('/:id', async (request, response, next) => {
   try {
     const body = request.body
 
+    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'token invalid' })
+    }
+
     if (!body.title?.trim()) {
       return response.status(400).json({ error: 'title missing' })
     }
@@ -92,6 +111,10 @@ notesRouter.put('/:id', async (request, response, next) => {
 
     if (!note) {
       return response.status(404).end()
+    }
+
+    if (note.user.toString() !== decodedToken.id) {
+      return response.status(403).json({ error: 'forbidden' })
     }
 
     note.title = body.title
@@ -109,11 +132,22 @@ notesRouter.put('/:id', async (request, response, next) => {
 // Deleting a note
 notesRouter.delete('/:id', async (request, response, next) => {
   try {
-    const note = await Note.findByIdAndDelete(request.params.id)
+    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'token invalid' })
+    }
+
+    const note = await Note.findById(request.params.id)
 
     if (!note) {
       return response.status(404).json({ error: 'note not found' })
     }
+
+    if (note.user.toString() !== decodedToken.id) {
+      return response.status(403).json({ error: 'forbidden' })
+    }
+
+    await Note.findByIdAndDelete(request.params.id)
 
     response.status(204).end()
   } catch (error) {

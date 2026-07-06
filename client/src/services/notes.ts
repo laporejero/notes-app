@@ -9,8 +9,12 @@ const setToken = (newToken:string) => {
     token = `Bearer ${newToken}`
 }
 
-const getAll = () => {
-    return axios.get(baseUrl)
+const getAll = async () => {
+    const config = {
+        headers: { Authorization: token }
+    }
+    const response = await axios.get(baseUrl, config)
+    return response.data
 }
 
 const create = async (newNote:Note) => {
@@ -22,11 +26,17 @@ const create = async (newNote:Note) => {
 }
 
 const update = (id:string, updatedNote:Note) => {
-    return axios.put(`${baseUrl}/${id}`, updatedNote)
+    const config = {
+        headers: { Authorization: token }
+    }
+    return axios.put(`${baseUrl}/${id}`, updatedNote, config)
 }
 
 const deleteNote = (id:string) => {
-    return axios.delete(`${baseUrl}/${id}`)
+    const config = {
+        headers: { Authorization: token }
+    }
+    return axios.delete(`${baseUrl}/${id}`, config)
 }
 
 export default { getAll, create, update, deleteNote, setToken }
