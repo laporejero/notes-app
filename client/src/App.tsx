@@ -5,7 +5,7 @@ import noteService from "./services/notes"
 import loginService from "./services/login"
 
 // Types
-import type { Note, Filter, Sort } from "./types"
+import type { Note, Filter, Sort, User } from "./types"
 
 // Components
 import LoginForm from "./components/LoginForm"
@@ -27,21 +27,7 @@ function App() {
   const [loading, setLoading] = useState<boolean>(true)
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const [user, setUser] = useState<string|null>(null)
-
-  useEffect(() => {
-    noteService
-      .getAll()
-      .then(response => {
-        setNotes(response.data)
-      })
-      .catch(err => {
-        console.error('Failed to fetch notes:', err)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [])
+  const [user, setUser] = useState<User|null>(null)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNotesAppUser')
@@ -51,6 +37,24 @@ function App() {
       noteService.setToken(user.token)
     }
   }, [])
+
+  useEffect(() => {
+    if (!user) return
+
+    setLoading(true)
+
+    noteService
+      .getAll()
+      .then(notes => {
+        setNotes(notes)
+      })
+      .catch(err => {
+        console.error('Failed to fetch notes:', err)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [user])
 
   // login
   async function handleLogin(event:any) {
@@ -72,6 +76,7 @@ function App() {
   function handleLogout(event:any) {
     event.preventDefault()
     window.localStorage.removeItem('loggedNotesAppUser')
+    noteService.setToken('')
     setUser(null)
   }
 
@@ -90,8 +95,8 @@ function App() {
 
     noteService
       .create(newNote)
-      .then(response => {
-        setNotes(notes.concat(response.data))
+      .then(note => {
+        setNotes(prevNotes => [...prevNotes, note])
       })
       .catch(err => {
         console.error('Failed to create note', err)

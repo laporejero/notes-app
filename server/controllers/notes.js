@@ -37,10 +37,10 @@ notesRouter.get('/:id', async (request, response, next) => {
     const note = await Note.findById(request.params.id)
 
     if (!note) {
-      response.status(404).json({ error: 'note not found' })
+      return response.status(404).json({ error: 'note not found' })
     }
 
-    if (note.user._id.toString() !== decodedToken.id) {
+    if (note.user.toString() !== decodedToken.id) {
       return response.status(403).json({ error: 'forbidden' })
     }
 

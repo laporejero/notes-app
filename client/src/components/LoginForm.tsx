@@ -73,6 +73,7 @@ function LoginForm({ handleLogin, username, password, setUsername, setPassword }
 
                         label="Username"
                         variant="outlined"
+                        autoComplete="username"
                         fullWidth
                         sx={{
                             "& .MuiOutlinedInput-root": {
@@ -109,6 +110,7 @@ function LoginForm({ handleLogin, username, password, setUsername, setPassword }
                         label="Password"
                         type="password"
                         variant="outlined"
+                        autoComplete="current-password"
                         fullWidth
                         sx={{
                         "& .MuiOutlinedInput-root": {

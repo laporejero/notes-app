@@ -7,6 +7,12 @@ export type Note = {
     createdAt: string
 }
 
+export type User = {
+    token: string,
+    username: string,
+    name: string
+}
+
 export type Filter = "All" | "Favorites" | "Pinned"
 
 export type Sort = "Newest" | "Oldest" | "Favorites"
