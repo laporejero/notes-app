@@ -15,6 +15,7 @@ import NoteForm from "./components/NoteForm"
 import NoteFilter from "./components/NoteFilter"
 import NoteSort from "./components/NoteSort"
 import UndoButton from "./components/UndoButton/UndoButton"
+import axios from "axios"
 
 function App() {
   // States
@@ -28,6 +29,7 @@ function App() {
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [user, setUser] = useState<User|null>(null)
+  const [loginErr, setLoginErr] = useState<string|null>(null)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNotesAppUser')
@@ -69,7 +71,11 @@ function App() {
       setUsername('')
       setPassword('')
     } catch (error) {
-      console.error('failed to sign in')
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        setLoginErr('Invalid username or password.')
+      } else {
+        setLoginErr('Unable to connect to the server. Please try again later.')
+      }
     }
   }
 
@@ -289,14 +295,14 @@ function App() {
       {user
         ? (
           <>
-          <Navbar search={search} setSearch={setSearch} handleLogout={handleLogout} />
-          <main>
-            <NoteForm addNote={addNote} />
-            <NoteFilter filter={filter} setFilter={setFilter} />
-            <NoteSort sort={sort} setSort={setSort} />
-            <UndoButton undo={undoDelete} show={showUndo} />
-            {content}
-          </main>
+            <Navbar search={search} setSearch={setSearch} handleLogout={handleLogout} />
+            <main>
+              <NoteForm addNote={addNote} />
+              <NoteFilter filter={filter} setFilter={setFilter} />
+              <NoteSort sort={sort} setSort={setSort} />
+              <UndoButton undo={undoDelete} show={showUndo} />
+              {content}
+            </main>
           </>
         )
         : (
@@ -306,6 +312,8 @@ function App() {
             password={password}
             setUsername={setUsername} 
             setPassword={setPassword} 
+            loginErr={loginErr}
+            setLoginErr={setLoginErr}
           />
         )
       }

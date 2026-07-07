@@ -1,4 +1,4 @@
-import type { JSX } from 'react'
+import { useEffect, type JSX } from 'react'
 import {
     Box,
     Button,
@@ -6,6 +6,7 @@ import {
     Stack,
     TextField,
     Typography,
+    Alert
 } from '@mui/material'
 
 type LoginFormProps = {
@@ -14,9 +15,20 @@ type LoginFormProps = {
     password: string
     setUsername: (v: string) => void
     setPassword: (v: string) => void
+    loginErr: string|null
+    setLoginErr: (v: string|null) => void
 } 
 
-function LoginForm({ handleLogin, username, password, setUsername, setPassword }:LoginFormProps): JSX.Element {
+function LoginForm({ handleLogin, username, password, setUsername, setPassword, loginErr, setLoginErr }:LoginFormProps): JSX.Element {
+    useEffect(() => {
+        if (!loginErr) return
+        const timer = setTimeout(() => {
+            setLoginErr(null)
+        }, 5000)
+
+        return () => clearTimeout(timer)
+    }, [loginErr])
+
     return (
         <Box 
             component="form"
@@ -75,6 +87,7 @@ function LoginForm({ handleLogin, username, password, setUsername, setPassword }
                         variant="outlined"
                         autoComplete="username"
                         fullWidth
+                        required
                         sx={{
                             "& .MuiOutlinedInput-root": {
                                 color: "rgb(232,232,232)",
@@ -112,6 +125,7 @@ function LoginForm({ handleLogin, username, password, setUsername, setPassword }
                         variant="outlined"
                         autoComplete="current-password"
                         fullWidth
+                        required
                         sx={{
                         "& .MuiOutlinedInput-root": {
                             color: "rgb(232,232,232)",
@@ -161,6 +175,14 @@ function LoginForm({ handleLogin, username, password, setUsername, setPassword }
                     >
                         Sign In
                     </Button>
+                    {loginErr && (
+                        <Alert 
+                            severity='error'
+                            sx={{ fontSize: "var(--text-base)" }}
+                        >
+                            {loginErr}
+                        </Alert>
+                        )}
                 </Stack>
             </Paper>
         </Box>
