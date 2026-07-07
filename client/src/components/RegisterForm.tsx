@@ -25,6 +25,23 @@ const RegisterForm = ({ onRegister, goToLogin }: RegisterFormProps): JSX.Element
         event.preventDefault()
 
         try {
+            setRegisterErr(null)
+
+            if (!name.trim()) {
+                setRegisterErr('Name is required.')
+                return
+            }
+
+            if (username.trim().length < 3) {
+                setRegisterErr('Username must be at least 3 characters')
+                return
+            }
+
+            if (password.length < 5) {
+                setRegisterErr('Password must be at least 5 characters')
+                return
+            }
+
             await onRegister(username, name, password)
 
             setUsername('')
