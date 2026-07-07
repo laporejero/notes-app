@@ -7,7 +7,7 @@ A full-stack notes application built with React, TypeScript, Node.js, Express, a
 ## Features
 
 * JWT Authentication
-* User administration and login
+* User registration and login
 * Create, edit, and delete notes
 * Pin notes to keep important items at the top
 * Mark notes as favorites
@@ -57,7 +57,8 @@ Building and deploying the application also taught me how frontend and backend s
 
 Overall, this project strengthened my understanding of full-stack development, REST API design, database integration, user authentication, deployment workflows, and debugging real-world applications.
 
-<img width="1638" height="832" alt="loginpage" src="https://github.com/user-attachments/assets/18c32a82-3d79-4c80-9cda-73230d101fad" />
+<img width="1788" height="920" alt="loginpage" src="https://github.com/user-attachments/assets/d4ecd132-b803-4162-abcf-462a8af0c22e" />
+<img width="1823" height="914" alt="registerform" src="https://github.com/user-attachments/assets/1b3466b1-b5cd-4c5c-86fc-55c3736eb61e" />
 <img width="1902" height="928" alt="web-view" src="https://github.com/user-attachments/assets/f3444933-ff73-43de-80a7-d1398be0202f" />
 <img width="1904" height="929" alt="web-modal-view" src="https://github.com/user-attachments/assets/bdfcf8e9-2513-4e76-95ed-eb0ca6624e18" />
 <img width="392" height="844" alt="mobile-view" src="https://github.com/user-attachments/assets/4f832136-aa03-42a4-a265-20fcf1791355" />
