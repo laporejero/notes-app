@@ -15,7 +15,6 @@ import NoteForm from "./components/NoteForm"
 import NoteFilter from "./components/NoteFilter"
 import NoteSort from "./components/NoteSort"
 import UndoButton from "./components/UndoButton/UndoButton"
-import axios from "axios"
 
 function App() {
   // States
@@ -26,10 +25,7 @@ function App() {
   const [history, setHistory] = useState<Note[]>([])
   const [showUndo, setShowUndo] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
-  const [username, setUsername] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
   const [user, setUser] = useState<User|null>(null)
-  const [loginErr, setLoginErr] = useState<string|null>(null)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNotesAppUser')
@@ -59,24 +55,13 @@ function App() {
   }, [user])
 
   // login
-  async function handleLogin(event:any) {
-    event.preventDefault()
+  async function handleLogin(username:string, password:string) {
+    const user = await loginService.login(username, password)
     
-    try {
-      const user = await loginService.login(username, password)
+    window.localStorage.setItem('loggedNotesAppUser', JSON.stringify(user))
 
-      window.localStorage.setItem('loggedNotesAppUser', JSON.stringify(user))
-      noteService.setToken(user.token)
-      setUser(user)
-      setUsername('')
-      setPassword('')
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        setLoginErr('Invalid username or password.')
-      } else {
-        setLoginErr('Unable to connect to the server. Please try again later.')
-      }
-    }
+    noteService.setToken(user.token)
+    setUser(user)
   }
 
   function handleLogout(event:any) {
@@ -308,12 +293,6 @@ function App() {
         : (
           <LoginForm 
             handleLogin={handleLogin}
-            username={username}
-            password={password}
-            setUsername={setUsername} 
-            setPassword={setPassword} 
-            loginErr={loginErr}
-            setLoginErr={setLoginErr}
           />
         )
       }

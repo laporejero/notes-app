@@ -1,4 +1,4 @@
-import { useEffect, type JSX } from 'react'
+import { useState, useEffect, type JSX } from 'react'
 import {
     Box,
     Button,
@@ -8,18 +8,38 @@ import {
     Typography,
     Alert
 } from '@mui/material'
+import axios from 'axios'
 
 type LoginFormProps = {
-    handleLogin: (v: any) => void
-    username: string
-    password: string
-    setUsername: (v: string) => void
-    setPassword: (v: string) => void
-    loginErr: string|null
-    setLoginErr: (v: string|null) => void
+    handleLogin: (username:string, password:string) => void
 } 
 
-function LoginForm({ handleLogin, username, password, setUsername, setPassword, loginErr, setLoginErr }:LoginFormProps): JSX.Element {
+function LoginForm({ handleLogin }:LoginFormProps): JSX.Element {
+    const [username, setUsername] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
+    const [loginErr, setLoginErr] = useState<string|null>(null)
+
+    const submit = async (event:any) => {
+        event.preventDefault()
+
+        try {
+            await handleLogin(username, password)
+
+            setUsername('')
+            setPassword('')
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 401) {
+                    setLoginErr('Invalid username and password')
+                } else {
+                    setLoginErr('Unable to connect to server. Please try again later')
+                }
+            } else {
+                setLoginErr('Something went wrong')
+            }
+        }
+    }
+
     useEffect(() => {
         if (!loginErr) return
         const timer = setTimeout(() => {
@@ -32,7 +52,7 @@ function LoginForm({ handleLogin, username, password, setUsername, setPassword, 
     return (
         <Box 
             component="form"
-            onSubmit={handleLogin}
+            onSubmit={submit}
             sx={{
             minHeight: "100vh",
             bgcolor: "#191919",
