@@ -3,12 +3,14 @@ import { useEffect, useState } from "react"
 // Services
 import noteService from "./services/notes"
 import loginService from "./services/login"
+import userService from "./services/user"
 
 // Types
 import type { Note, Filter, Sort, User } from "./types"
 
 // Components
 import LoginForm from "./components/LoginForm"
+import RegisterForm from "./components/RegisterForm"
 import Navbar from "./components/Navbar"
 import NoteList from "./components/NoteList"
 import NoteForm from "./components/NoteForm"
@@ -26,6 +28,8 @@ function App() {
   const [showUndo, setShowUndo] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
   const [user, setUser] = useState<User|null>(null)
+  const [showRegister, setShowRegister] = useState<boolean>(false)
+  const [successMessage, setSuccessMessage] = useState<string|null>(null)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNotesAppUser')
@@ -69,6 +73,13 @@ function App() {
     window.localStorage.removeItem('loggedNotesAppUser')
     noteService.setToken('')
     setUser(null)
+  }
+
+  async function handleRegister(username:string, name:string, password:string) {
+    await userService.create({username, name, password})
+
+    setSuccessMessage('Account created successfully. Please sign in.')
+    setShowRegister(false)
   }
 
   // Add Note function
@@ -127,8 +138,8 @@ function App() {
 
     noteService
       .create(lastDeleted)
-      .then(response => {
-        setNotes(prevNotes => [...prevNotes, response.data])
+      .then(lastDeletedNote => {
+        setNotes(prevNotes => [...prevNotes, lastDeletedNote])
 
         setHistory(prevHistory => {
           const newHistory:Note[] = prevHistory.slice(0, -1)
@@ -290,9 +301,17 @@ function App() {
             </main>
           </>
         )
-        : (
+        : showRegister ? (
+          <RegisterForm 
+            onRegister={handleRegister} 
+            goToLogin={() => setShowRegister(false)} 
+          />
+        ) : (
           <LoginForm 
-            handleLogin={handleLogin}
+            handleLogin={handleLogin} 
+            goToRegister={() => setShowRegister(true)}
+            successMessage={successMessage}
+            setSuccessMessage={setSuccessMessage}
           />
         )
       }

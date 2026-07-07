@@ -12,9 +12,17 @@ import axios from 'axios'
 
 type LoginFormProps = {
     handleLogin: (username:string, password:string) => void
+    goToRegister: () => void
+    successMessage: string|null
+    setSuccessMessage: (v: string|null) => void
 } 
 
-function LoginForm({ handleLogin }:LoginFormProps): JSX.Element {
+function LoginForm({ 
+    handleLogin, 
+    goToRegister, 
+    successMessage, 
+    setSuccessMessage 
+}:LoginFormProps): JSX.Element {
     const [username, setUsername] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [loginErr, setLoginErr] = useState<string|null>(null)
@@ -40,6 +48,7 @@ function LoginForm({ handleLogin }:LoginFormProps): JSX.Element {
         }
     }
 
+    // login error message
     useEffect(() => {
         if (!loginErr) return
         const timer = setTimeout(() => {
@@ -48,6 +57,17 @@ function LoginForm({ handleLogin }:LoginFormProps): JSX.Element {
 
         return () => clearTimeout(timer)
     }, [loginErr])
+
+    // register success message
+    useEffect(() => {
+        if (!successMessage) return
+
+        const timer = setTimeout(() => {
+            setSuccessMessage(null)
+        }, 5000)
+
+        return () => clearTimeout(timer)
+    })
 
     return (
         <Box 
@@ -99,6 +119,13 @@ function LoginForm({ handleLogin }:LoginFormProps): JSX.Element {
                     >
                         Sign in to access your notes.
                     </Typography>
+
+                    {successMessage && (
+                        <Alert severity="success" sx={{ fontSize: "var(--text-base)" }}>
+                            {successMessage}
+                        </Alert>
+                    )}
+
                     <TextField
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
@@ -202,7 +229,36 @@ function LoginForm({ handleLogin }:LoginFormProps): JSX.Element {
                         >
                             {loginErr}
                         </Alert>
-                        )}
+                        )
+                    }
+
+                    <Typography
+                        sx={{
+                            color: "rgb(165,165,165)",
+                            textAlign: "center",
+                            fontSize: "var(--text-base)"
+                        }}
+                        >
+                        Don't have an account?
+                        <Button
+                            onClick={goToRegister}
+                            sx={{ 
+                                textTransform: "none",
+                                fontSize: "var(--text-base)",
+                                minWidth: 0,
+                                p: 0,
+                                ml: 0.5,
+
+                                "&:hover": {
+                                    backgroundColor: "transparent",
+                                    color: "rgb(165,165,165)",
+                                    textDecoration: "underline",
+                                },
+                            }}
+                        >
+                            Register
+                        </Button>
+                    </Typography>
                 </Stack>
             </Paper>
         </Box>
