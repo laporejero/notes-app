@@ -3,6 +3,7 @@ import {
   Alert,
   Box,
   Button,
+  CircularProgress,
   Paper,
   Stack,
   TextField,
@@ -20,9 +21,12 @@ const RegisterForm = ({ onRegister, goToLogin }: RegisterFormProps): JSX.Element
     const [username, setUsername] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [registerErr, setRegisterErr] = useState<string|null>(null)
+    const [loading, setLoading] = useState<boolean>(false)
 
     const submit = async (event:any) => {
         event.preventDefault()
+
+        setLoading(true)
 
         try {
             setRegisterErr(null)
@@ -53,6 +57,8 @@ const RegisterForm = ({ onRegister, goToLogin }: RegisterFormProps): JSX.Element
             } else {
                 setRegisterErr('Something went wrong')
             }
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -154,6 +160,7 @@ const RegisterForm = ({ onRegister, goToLogin }: RegisterFormProps): JSX.Element
 
                     <Button
                         type="submit"
+                        disabled={loading}
                         variant="outlined"
                         size="large"
                         sx={{
@@ -171,7 +178,14 @@ const RegisterForm = ({ onRegister, goToLogin }: RegisterFormProps): JSX.Element
                         },
                         }}
                     >
-                        Register
+                        {loading ? (
+                            <CircularProgress 
+                                size={20} 
+                                sx={{ color: "rgb(232,232,232)" }} 
+                            />
+                        ) : (
+                            'Register'
+                        )}
                     </Button>
 
                     {registerErr && (

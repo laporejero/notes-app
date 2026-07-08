@@ -6,7 +6,8 @@ import {
     Stack,
     TextField,
     Typography,
-    Alert
+    Alert,
+    CircularProgress
 } from '@mui/material'
 import axios from 'axios'
 
@@ -26,9 +27,12 @@ function LoginForm({
     const [username, setUsername] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [loginErr, setLoginErr] = useState<string|null>(null)
+    const [loading, setLoading] = useState<boolean>(false)
 
     const submit = async (event:any) => {
         event.preventDefault()
+
+        setLoading(true)
 
         try {
             await handleLogin(username, password)
@@ -45,6 +49,8 @@ function LoginForm({
             } else {
                 setLoginErr('Something went wrong')
             }
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -203,6 +209,7 @@ function LoginForm({
                     />
                     <Button
                         type="submit"
+                        disabled={loading}
                         variant="outlined"
                         size="large"
                         sx={{
@@ -220,7 +227,15 @@ function LoginForm({
                             },
                         }}
                     >
-                        Sign In
+                        {loading ? (
+                            <CircularProgress 
+                                size={20} 
+                                sx={{ color: "rgb(232,232,232)" }}
+                            />
+                        ) : (
+                            'Sign In'
+                        )}
+                        
                     </Button>
                     {loginErr && (
                         <Alert 
