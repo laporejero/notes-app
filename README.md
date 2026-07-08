@@ -26,7 +26,7 @@ A full-stack notes application built with React, TypeScript, Node.js, Express, a
 * TypeScript
 * Vite
 * CSS
-* Material UI for the Sign in page
+* Material UI
 
 ### Backend
 
