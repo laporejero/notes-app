@@ -82,78 +82,57 @@ function App() {
     setShowRegister(false)
   }
 
-  // Add Note function
-  function addNote(title:string, body:string):void {
+  async function addNote(title:string, body:string):Promise<void> {
     if (!title.trim() || !body.trim()) return
 
-    const newNote:Note = {
-      id: String(Date.now()),
-      title: title,
-      note: body,
-      isFavorite: false,
-      pinned: false,
-      createdAt: new Date().toISOString()
-    }
+    try {
+      const newNote:Note = {
+        id: String(Date.now()),
+        title: title,
+        note: body,
+        isFavorite: false,
+        pinned: false,
+        createdAt: new Date().toISOString()
+      }
 
-    noteService
-      .create(newNote)
-      .then(note => {
-        setNotes(prevNotes => [...prevNotes, note])
-      })
-      .catch(err => {
-        console.error('Failed to create note', err)
-      })
+      const note = await noteService.create(newNote)
+      setNotes(prevNotes => [...prevNotes, note])
+    } catch (error) {
+      console.error('Failed to create note', error)
+    }
+    
   }
 
-  // Delete note function
-  function deleteNote(id:string):void {
+  async function deleteNote(id:string):Promise<void> {
     const noteToDelete = notes.find(note => note.id === id)
-
     if (!noteToDelete) return
 
-    noteService
-      .deleteNote(id)
-      .then(() => {
-        // save current notes
-        setHistory(prevHistory => [...prevHistory, noteToDelete])
-
-        // delete note
-        setNotes(prevNotes => 
-          prevNotes.filter(note => note.id !== id)
-        )
-
-        // show undo button
-        setShowUndo(true)
-      })
-      .catch(err => {
-        console.error('Failed to delete note:', err)
-      })
+    try {
+      await noteService.deleteNote(id)
+      setHistory(prevHistory => [...prevHistory, noteToDelete])
+      setNotes(prevNotes =>
+        prevNotes.filter(note => note.id !== id)
+      )
+      setShowUndo(true)
+    } catch (error) {
+      console.error('Failed to delete note:', error)
+    }
   }
 
-  // Undo note delete
-  function undoDelete():void {
+  async function undoDelete():Promise<void> {
     const lastDeleted:Note = history[history.length - 1]
-
     if (!lastDeleted) return
 
-    noteService
-      .create(lastDeleted)
-      .then(lastDeletedNote => {
-        setNotes(prevNotes => [...prevNotes, lastDeletedNote])
+    try {
+      const lastDeletedNote = await noteService.create(lastDeleted)
+      setNotes(prevNotes => [...prevNotes, lastDeletedNote])
 
-        setHistory(prevHistory => {
-          const newHistory:Note[] = prevHistory.slice(0, -1)
-
-          if (newHistory.length === 0) {
-            setShowUndo(false)
-          }
-
-          return newHistory
-        })
-      })
-      .catch(err => {
-        console.error('Undo failed:', err)
-      })
+      const newHistory = history.slice(0, -1)
+      setHistory(newHistory)
+      setShowUndo(newHistory.length > 0)
+    } catch (error) {
+      console.error('Undo failed:', error)
+    }
   }
 
   useEffect(() => {
@@ -167,49 +146,47 @@ function App() {
   }, [showUndo])
 
   // Toggle Favorite note function
-  function toggleFavorites(id:string):void {
+  async function toggleFavorites(id:string):Promise<void> {
     const note:Note|undefined = notes.find(n => n.id === id)
 
     if (!note) return
 
     const changedNote:Note = { ...note, isFavorite: !note.isFavorite }
 
-    noteService
-      .update(id, changedNote)
-      .then(() => {
-        setNotes(prevNotes =>
-          prevNotes.map(note => 
-            note.id === id ? { ...note, isFavorite: !note.isFavorite } : note
-          ))  
-      })
-      .catch(err => {
-        console.error('Failed to update favorite status:', err)
-      })
+    try {
+      const updatedNote = await noteService.update(id, changedNote)
+      setNotes(prevNotes =>
+        prevNotes.map(note =>
+          note.id === id ? updatedNote : note
+        )
+      )
+    } catch (error) {
+      console.error('Failed to update favorite status:', error)
+    }
   }
 
   // Toggle Pin note function
-  function togglePin(id:string):void {
+  async function togglePin(id:string):Promise<void> {
     const note:Note|undefined = notes.find(n => n.id === id)
 
     if (!note) return
 
     const changedNote:Note = { ...note, pinned: !note.pinned }
 
-    noteService
-      .update(id, changedNote)
-      .then(() => {
-        setNotes(prevNotes =>
-          prevNotes.map(note =>
-            note.id === id ? { ...note, pinned: !note.pinned } : note
-          ))
-      })
-      .catch(err => {
-        console.error('Failed to update pin status:', err)
-      })
+    try {
+      const updatedNote = await noteService.update(id, changedNote)
+      setNotes(prevNotes =>
+        prevNotes.map(note =>
+          note.id === id ? updatedNote : note
+        )
+      )
+    } catch (error) {
+      console.log('Failed to update pin status:', error)
+    }
   }
 
   // Update note function
-  function handleUpdateNote(id:string, updatedTitle:string, updatedText:string):void {
+  async function handleUpdateNote(id:string, updatedTitle:string, updatedText:string):Promise<void> {
     const note:Note|undefined = notes.find(note => note.id === id)
 
     if (!note) return
@@ -220,17 +197,16 @@ function App() {
       note: updatedText
     }
 
-    noteService
-      .update(id, updatedNote)
-      .then(() => {
-        setNotes(prevNotes =>
-          prevNotes.map(note =>
-              note.id === id ? updatedNote : note
-            ))
-      })
-      .catch(err => {
-        console.error('Failed to update note:', err)
-      })
+    try {
+      const savedNote = await noteService.update(id, updatedNote)
+      setNotes(prevNotes =>
+        prevNotes.map(note =>
+          note.id === id ? savedNote : note
+        )
+      )
+    } catch (error) {
+      console.error('Failed to update note:', error)
+    }
   }
 
   // Filter & Sort Notes list
