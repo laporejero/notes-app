@@ -13,7 +13,11 @@ function Modal({ isOpen, onClose, children }: ModalProps): JSX.Element | null {
     return (
         <div className={styles.modalOverlay} onClick={onClose}>
             <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                <button className={styles.modalCloseBtn} onClick={onClose}>
+                <button 
+                    className={styles.modalCloseBtn} 
+                    onClick={onClose}
+                    aria-label="Close modal"
+                >
                     &times;
                 </button>
                 {children}

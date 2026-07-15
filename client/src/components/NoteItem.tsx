@@ -108,6 +108,7 @@ function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNo
                         {/* Delete Button */}
                         <IonIcon 
                             icon={trashOutline}
+                            aria-label="Delete note card"
                             style={{ 
                                 fontSize: isModalOpen ? "2rem" : "1.5rem", 
                                 cursor: 'pointer' }}
@@ -115,7 +116,7 @@ function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNo
                                 e.stopPropagation()
                                 deleteNote(note.id)
                             }}
-                            title="Delete"
+                            title="Delete note card"
                         />
                     </div>
                 </div>
@@ -156,13 +157,14 @@ function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNo
                             /> 
                             <IonIcon 
                                 icon={trashOutline} 
+                                aria-label="Delete note"
                                 style={{ fontSize: '2.5rem', cursor: 'pointer' }} 
                                 onClick={(e) => {
                                     e.stopPropagation()
                                     deleteNote(note.id)
                                     setIsModalOpen(false)
                                 }} 
-                                title="Delete"
+                                title="Delete note"
                             /> 
                         </div> 
                     </> 
