@@ -5,14 +5,10 @@ const initialNotes = [
   {
     title: "Meeting Minutes",
     note: "Discussed Q3 marketing budget. Sarah to follow up with the design team.",
-    isFavorite: false,
-    pinned: true
   },
   {
     title: "Project Ideas",
     note: "Brainstorming a mobile app for tracking local community volunteer events.",
-    isFavorite: true,
-    pinned: false
   },
 ]
 
@@ -37,4 +33,43 @@ const usersInDb = async () => {
   return users.map(user => user.toJSON())
 }
 
-module.exports = { initialNotes, notesInDb, nonExistingId, usersInDb }
+const createUser = async (api, user = {}) => {
+  const newUser = {
+    name: 'Test User',
+    username: 'testuser',
+    password: 'password123',
+    ...user
+  }
+
+  const response = await api.post('/api/users').send(newUser)
+  
+  return response.body
+}
+
+const login = async (api, credentials = {}) => {
+  const loginData = {
+    username: 'testuser',
+    password: 'password123',
+    ...credentials
+  }
+
+  const response = await api
+    .post('/api/login')
+    .send(loginData)
+
+  return response.body
+}
+
+const authHeader = token => ({
+  Authorization: `Bearer ${token}`
+})
+
+module.exports = { 
+  initialNotes, 
+  notesInDb, 
+  nonExistingId, 
+  usersInDb, 
+  createUser, 
+  login, 
+  authHeader 
+}
