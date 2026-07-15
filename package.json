@@ -4,7 +4,8 @@
   "description": "A full-stack notes application built with React, TypeScript, Node.js, Express, and MongoDB. Users can securely register, log in, and manage their own personal notes.",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\""
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "dev:test": "concurrently \"npm run test:dev --prefix server\" \"npm run dev --prefix client\""
   },
   "repository": {
     "type": "git",
