@@ -10,9 +10,14 @@ on:
         types: [opened, synchronize]
 
 jobs:
-    hello:
+    ci:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v6
-            - name: Show project files
-              run: ls -la
+            - uses: actions/setup-node@v6
+              with:
+                node-version: "24"
+            - name: Show Node version
+              run: node --version
+            - name: Show npm version
+              run: npm --version
