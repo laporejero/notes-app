@@ -28,3 +28,11 @@ jobs:
             - name: Install server dependencies
               run: npm install
               working-directory: server
+
+            - name: Lint server
+              run: npm run lint
+              working-directory: server
+
+            - name: Lint client
+              run: npm run lint
+              working-directory: client
