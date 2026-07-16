@@ -42,3 +42,4 @@ jobs:
               working-directory: server
               env:
                 TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
+                SECRET: ${{ secrets.SECRET }}
