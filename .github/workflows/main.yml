@@ -43,3 +43,7 @@ jobs:
               env:
                 TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
                 SECRET: ${{ secrets.SECRET }}
+            
+            - name: Build client
+              run: npm run build
+              working-directory: client
