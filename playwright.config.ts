@@ -77,5 +77,8 @@ export default defineConfig({
     url: 'http://127.0.0.1:3001/health',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
+
+    stdout: 'pipe',
+    stderr: 'pipe',
   },
 });
