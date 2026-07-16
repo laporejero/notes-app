@@ -3,17 +3,17 @@ const User = require('../models/user')
 
 const initialNotes = [
   {
-    title: "Meeting Minutes",
-    note: "Discussed Q3 marketing budget. Sarah to follow up with the design team.",
+    title: 'Meeting Minutes',
+    note: 'Discussed Q3 marketing budget. Sarah to follow up with the design team.',
   },
   {
-    title: "Project Ideas",
-    note: "Brainstorming a mobile app for tracking local community volunteer events.",
+    title: 'Project Ideas',
+    note: 'Brainstorming a mobile app for tracking local community volunteer events.',
   },
 ]
 
 const nonExistingId = async () => {
-  const note = new Note({ 
+  const note = new Note({
     title: 'willremovethissoon',
     note: 'willremovethisnotesoon'
   })
@@ -42,7 +42,7 @@ const createUser = async (api, user = {}) => {
   }
 
   const response = await api.post('/api/users').send(newUser)
-  
+
   return response.body
 }
 
@@ -64,12 +64,12 @@ const authHeader = token => ({
   Authorization: `Bearer ${token}`
 })
 
-module.exports = { 
-  initialNotes, 
-  notesInDb, 
-  nonExistingId, 
-  usersInDb, 
-  createUser, 
-  login, 
-  authHeader 
+module.exports = {
+  initialNotes,
+  notesInDb,
+  nonExistingId,
+  usersInDb,
+  createUser,
+  login,
+  authHeader
 }
