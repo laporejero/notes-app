@@ -4,10 +4,15 @@ on:
     push:
         branches:
             - main
+    pull_request:
+        branches:
+            - main
+        types: [opened, synchronize]
+
 jobs:
     hello:
         runs-on: ubuntu-latest
-
         steps:
-            - name: Say hello
-              run: echo "Github Actions is working!"
+            - uses: actions/checkout@v6
+            - name: Show project files
+              run: ls -la
