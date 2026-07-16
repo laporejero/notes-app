@@ -42,52 +42,50 @@ function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNo
         setEditText(note.note)
     }
 
-    function NoteTitle() {
-        return (
-            <h5> 
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "space-between"
-                    }}
-                >
-                    <div>
-                        {note.title} 
-                        {/* Star button */}
-                        <IonIcon 
-                            icon={note.isFavorite ? star : starOutline} 
-                            id={checkboxId} 
-                            style={{ 
-                                marginLeft: "1rem", 
-                                fontSize: isModalOpen ? "2rem" : "1.5rem", 
-                                color: note.isFavorite ? "gold" : "",
-                                cursor: "pointer"
-                            }} 
-                            onClick={(e) => { 
-                                e.stopPropagation()
-                                toggleFavorites(note.id)
-                            }} 
-                            title="Favorite"
-                        /> 
-                        {/* Pin button */}
-                        <IonIcon 
-                            icon={note.pinned ? bookmark : bookmarkOutline}
-                            style={{ 
-                                marginLeft: "1rem", 
-                                fontSize: isModalOpen ? "2rem" : "1.5rem",
-                                cursor: "pointer"
-                            }}
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                togglePin(note.id)
-                            }}
-                            title="Pin"
-                        />
-                    </div>
+    const noteTitle = (
+        <h5> 
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between"
+                }}
+            >
+                <div>
+                    {note.title} 
+                    {/* Star button */}
+                    <IonIcon 
+                        icon={note.isFavorite ? star : starOutline} 
+                        id={checkboxId} 
+                        style={{ 
+                            marginLeft: "1rem", 
+                            fontSize: isModalOpen ? "2rem" : "1.5rem", 
+                            color: note.isFavorite ? "gold" : "",
+                            cursor: "pointer"
+                        }} 
+                        onClick={(e) => { 
+                            e.stopPropagation()
+                            toggleFavorites(note.id)
+                        }} 
+                        title="Favorite"
+                    /> 
+                    {/* Pin button */}
+                    <IonIcon 
+                        icon={note.pinned ? bookmark : bookmarkOutline}
+                        style={{ 
+                            marginLeft: "1rem", 
+                            fontSize: isModalOpen ? "2rem" : "1.5rem",
+                            cursor: "pointer"
+                        }}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            togglePin(note.id)
+                        }}
+                        title="Pin"
+                    />
                 </div>
-            </h5> 
-        )
-    }
+            </div>
+        </h5> 
+    )
 
     return (
         <>
@@ -102,7 +100,7 @@ function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNo
                     justifyContent: "space-between"
                 }}>
                     <div>
-                        <NoteTitle />
+                        {noteTitle}
                     </div>
                     <div className="child">
                         {/* Delete Button */}
@@ -139,7 +137,7 @@ function NoteItem({ note, deleteNote, togglePin, toggleFavorites, handleUpdateNo
                     /> 
                 ) : ( 
                     <> 
-                        <NoteTitle />
+                        {noteTitle}
                         <div className="note-content" > 
                             {note.note} 
                         </div> 

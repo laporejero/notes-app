@@ -25,7 +25,7 @@ function NoteForm({ addNote }: NoteFormProps): JSX.Element {
             />
             <button 
                 onClick={() => {
-                    addNote(noteTitle, noteBody),
+                    addNote(noteTitle, noteBody)
                     setNoteTitle("")
                     setNoteBody("")
                 }}

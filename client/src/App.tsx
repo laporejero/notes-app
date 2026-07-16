@@ -27,23 +27,21 @@ function App() {
   const [history, setHistory] = useState<Note[]>([])
   const [showUndo, setShowUndo] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
-  const [user, setUser] = useState<User|null>(null)
+  const [user, setUser] = useState<User|null>(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNotesAppUser')
+    return loggedUserJSON ? JSON.parse(loggedUserJSON) : null
+  })
   const [showRegister, setShowRegister] = useState<boolean>(false)
   const [successMessage, setSuccessMessage] = useState<string|null>(null)
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedNotesAppUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+    if (user) {
       noteService.setToken(user.token)
     }
-  }, [])
+  }, [user])
 
   useEffect(() => {
     if (!user) return
-
-    setLoading(true)
 
     noteService
       .getAll()
@@ -68,7 +66,7 @@ function App() {
     setUser(user)
   }
 
-  function handleLogout(event:any) {
+  function handleLogout(event:React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault()
     window.localStorage.removeItem('loggedNotesAppUser')
     noteService.setToken('')

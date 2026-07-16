@@ -1,4 +1,5 @@
 import { useState, useEffect, type JSX } from 'react'
+import type { SubmitEvent } from 'react'
 import {
   Alert,
   Box,
@@ -23,7 +24,7 @@ const RegisterForm = ({ onRegister, goToLogin }: RegisterFormProps): JSX.Element
     const [registerErr, setRegisterErr] = useState<string|null>(null)
     const [loading, setLoading] = useState<boolean>(false)
 
-    const submit = async (event:any) => {
+    const submit = async (event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault()
 
         setLoading(true)

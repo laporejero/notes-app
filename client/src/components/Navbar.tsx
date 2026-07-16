@@ -3,7 +3,7 @@ import type { JSX } from "react"
 type NavbarProps = {
     search: string
     setSearch: (value: string) => void
-    handleLogout: (value: any) => void
+    handleLogout: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 function Navbar({ search, setSearch, handleLogout }: NavbarProps): JSX.Element {
