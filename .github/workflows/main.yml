@@ -36,3 +36,7 @@ jobs:
             - name: Lint client
               run: npm run lint
               working-directory: client
+            
+            - name: Run server tests
+              run: npm test
+              working-directory: server
