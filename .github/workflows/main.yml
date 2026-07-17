@@ -58,7 +58,7 @@ jobs:
                 SECRET: ${{ secrets.SECRET }}
 
     deploy:
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '#skip')
         needs: [build_and_test]
         runs-on: ubuntu-latest
         steps:
