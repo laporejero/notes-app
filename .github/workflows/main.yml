@@ -10,7 +10,7 @@ on:
         types: [opened, synchronize]
 
 jobs:
-    ci:
+    build_and_test:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v6
@@ -56,3 +56,11 @@ jobs:
               env:
                 TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
                 SECRET: ${{ secrets.SECRET }}
+
+    deploy:
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        needs: [build_and_test]
+        runs-on: ubuntu-latest
+        steps:
+            - name: Trigger Render deployment
+              run: curl --fail "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
