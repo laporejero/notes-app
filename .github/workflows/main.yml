@@ -1,4 +1,4 @@
-name: Notes app CI
+name: Deployment pipeline
 
 on:
     push:
@@ -64,3 +64,14 @@ jobs:
         steps:
             - name: Trigger Render deployment
               run: curl --fail "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+    
+    health_check:
+        needs: deploy
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check deployed app
+              uses: jtalk/url-health-check-action@v5
+              with:
+                url: https://notes-app-srlh.onrender.com/
+                max-attempts: 20
+                retry-delay: 10s
