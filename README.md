@@ -17,6 +17,7 @@ A full-stack notes application built with React, TypeScript, Node.js, Express, a
 * Responsive layout for desktop, tablet, and mobile devices
 * Persistent data storage using MongoDB Atlas
 * RESTful API integration between frontend and backend
+* CI/CD pipeline
 
 ## Tech Stack
 
