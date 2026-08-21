@@ -1,0 +1,44 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./index.html:/app/index.html
+      - ./vite.config.ts:/app/vite.config.ts
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./tsconfig.app.json:/app/tsconfig.app.json
+      - ./tsconfig.node.json:/app/tsconfig.node.json
+      - ./eslint.config.js:/app/eslint.config.js
+    develop:
+      watch:
+        - path: ./src
+          action: sync
+          target: /app/src
+        - path: ./public
+          action: sync
+          target: /app/public
+        - path: ./vite.config.ts
+          action: sync
+          target: /app/vite.config.ts
+        - path: ./eslint.config.js
+          action: sync
+          target: /app/eslint.config.js
+        - path: ./package.json
+          action: rebuild
+
+  # Mock backend server (json-server)
+  server:
+    image: node:22-alpine
+    working_dir: /app
+    command: npx json-server -p 3002 db.json --host 0.0.0.0
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./db.json:/app/db.json
+    environment:
+      - NODE_ENV=development

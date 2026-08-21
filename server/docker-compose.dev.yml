@@ -1,0 +1,55 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongo:27017/notes-app
+      - PORT=3001
+    volumes:
+      - ./index.js:/app/index.js
+      - ./app.js:/app/app.js
+      - ./controllers:/app/controllers
+      - ./models:/app/models
+      - ./utils:/app/utils
+    develop:
+      watch:
+        - path: ./index.js
+          action: sync
+          target: /app/index.js
+        - path: ./app.js
+          action: sync
+          target: /app/app.js
+        - path: ./controllers
+          action: sync
+          target: /app/controllers
+        - path: ./models
+          action: sync
+          target: /app/models
+        - path: ./utils
+          action: sync
+          target: /app/utils
+        - path: ./package.json
+          action: rebuild
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DB=notes-app
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mongo_data:

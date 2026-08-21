@@ -1,0 +1,105 @@
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - client
+      - server
+    networks:
+      - app-network
+
+  client:
+    build:
+      context: ./client
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
+      - ./client/index.html:/app/index.html
+      - ./client/vite.config.ts:/app/vite.config.ts
+      - ./client/tsconfig.json:/app/tsconfig.json
+      - ./client/tsconfig.app.json:/app/tsconfig.app.json
+      - ./client/tsconfig.node.json:/app/tsconfig.node.json
+      - ./client/eslint.config.js:/app/eslint.config.js
+    develop:
+      watch:
+        - path: ./client/src
+          action: sync
+          target: /app/src
+        - path: ./client/public
+          action: sync
+          target: /app/public
+        - path: ./client/vite.config.ts
+          action: sync
+          target: /app/vite.config.ts
+        - path: ./client/eslint.config.js
+          action: sync
+          target: /app/eslint.config.js
+        - path: ./client/package.json
+          action: rebuild
+    depends_on:
+      - server
+    networks:
+      - app-network
+
+  server:
+    build:
+      context: ./server
+      dockerfile: dev.Dockerfile
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongo:27017/notes-app
+      - PORT=3001
+    volumes:
+      - ./server/index.js:/app/index.js
+      - ./server/app.js:/app/app.js
+      - ./server/controllers:/app/controllers
+      - ./server/models:/app/models
+      - ./server/utils:/app/utils
+    develop:
+      watch:
+        - path: ./server/index.js
+          action: sync
+          target: /app/index.js
+        - path: ./server/app.js
+          action: sync
+          target: /app/app.js
+        - path: ./server/controllers
+          action: sync
+          target: /app/controllers
+        - path: ./server/models
+          action: sync
+          target: /app/models
+        - path: ./server/utils
+          action: sync
+          target: /app/utils
+        - path: ./server/package.json
+          action: rebuild
+    depends_on:
+      - mongo
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_DB=notes-app
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongo_data:
