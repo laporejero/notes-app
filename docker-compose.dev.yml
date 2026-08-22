@@ -1,5 +1,6 @@
 services:
   nginx:
+    container_name: notes-app-nginx-dev
     image: nginx:latest
     ports:
       - "8080:80"
@@ -12,6 +13,7 @@ services:
       - app-network
 
   client:
+    container_name: notes-app-client-dev
     build:
       context: ./client
       dockerfile: dev.Dockerfile
@@ -46,12 +48,14 @@ services:
       - app-network
 
   server:
+    container_name: notes-app-server-dev
     build:
       context: ./server
       dockerfile: dev.Dockerfile
+    env_file:
+      - ./server/.env
     environment:
       - NODE_ENV=development
-      - MONGODB_URI=mongodb://mongo:27017/notes-app
       - PORT=3001
     volumes:
       - ./server/index.js:/app/index.js
@@ -78,28 +82,9 @@ services:
           target: /app/utils
         - path: ./server/package.json
           action: rebuild
-    depends_on:
-      - mongo
-    networks:
-      - app-network
-
-  mongo:
-    image: mongo:latest
-    environment:
-      - MONGO_INITDB_DB=notes-app
-    volumes:
-      - mongo_data:/data/db
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
       - app-network
 
 networks:
   app-network:
     driver: bridge
-
-volumes:
-  mongo_data:
