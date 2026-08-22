@@ -1,0 +1,46 @@
+services:
+  nginx:
+    container_name: notes-app-nginx
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - client
+      - server
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  client:
+    container_name: notes-app-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  server:
+    container_name: notes-app-server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    env_file:
+      - ./server/.env
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  app-network:
+    driver: bridge
